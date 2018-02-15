@@ -1,0 +1,63 @@
+h1, h2, h3 {
+    color: #167249;
+}
+a {
+    color: #167249;
+    text-decoration: none
+}
+a:hover{
+    color:#eb6f1f;
+    text-decoration: none
+}
+/* цвет фона и рамки навигационного меню */
+.navbar-default {
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+/* цвет текста, содержащий название сайта или бренда */
+.navbar-default .navbar-brand {
+    color: #167249;
+}
+.navbar-default .navbar-right {
+    color: #167249;
+}
+/*  цвет текста (название сайта или бренда), при поднесении к нему курсора мышки или
+при его нахождении в фокусе */
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #eb6f1f;
+}
+/* цвет панели */
+.panel .panel-heading {
+    background-color: #167249;
+    border-color: #167249;
+    color: #ffffff
+}
+.my_button {
+    width: 320px;
+    height: 27px;
+}
+table.form_table {
+    margin: 0 auto;
+    min-width: 600px;
+    width: 50%;
+    border: 0;
+    border-spacing: 0;
+}
+table.form_table tr:nth-child(odd) {
+    background: #fff;
+}
+table.form_table tr:nth-child(even) {
+    background: #E8E8E8;
+}
+table.form_table th,
+table.form_table td {
+    padding: 6px;
+}
+.center {
+    text-align: center;
+}
+footer {
+    margin-top: 12em;
+    font-size: smaller;
+}
