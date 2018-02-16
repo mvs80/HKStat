@@ -1,67 +1,88 @@
 {% extends "report.html" %}
 {% load static %}
 
+{% block breadcrumbs %}
+    <li><a href="{% url 'HotKeyStat-index' %}">Home</a> </li>
+    <li><a href="{% url 'hkstat-progress' %}">Progress overview(main)</a> </li>
+    <li class='active'>{{ blocks.0.parent.name }} </li>
+{% endblock %}
+
 {% block page_header %}
     <h2 align="center">
-        Progress Overview
+        <span class="glyphicon glyphicon-education" aria-hidden="true"></span> &nbsp;
+        Progress Overview<br>
+        <small>{{ blocks.0.parent.name }}</small>
     </h2>
 {% endblock %}
 
 {% block page_content %}
 
-{% if errors %}
-    <div class="alert alert-danger" role="alert">
-        {% for er in errors %}
-            {{ er }}<br/>
-        {% endfor %}
-        </p>
-    </div>
-{% endif %}
-{% if messages %}
-<div class="alert alert-success" role="alert">
-    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-    {% for message in messages %}
-        {{ message }}<br>
-    {% endfor %}
-</div>
-{% endif %}
-
-    <form action='.' method='POST' id='form-protocol'>
-        {% csrf_token %}
-        <table class="form_table">
-            <tr>
-               <td>Learners</td>
-                {% for block in blocks %}
-                    <td colspan="2"> 
-                        <a href="{% url 'hkstat-progress-block' block.id %}">
-                            {{ block }}
-                        </a>
-                    </td>
-                {% endfor %}
-            </tr>
-            {% for result in all_results %}
-            
-            <tr>
-                <td width="20%" align="left">
-                    {{result.0.surname}}&nbsp;{{result.0.name}}<br>
-                    <small>{{ result.0.email }}</small>
-                </td>
-                {% for res in result.1 %}
-                    <td width="10%" align="center">
-                            {{res}}
-                    </td>
-                {% endfor %}
-               
-            </tr>
+    {% if errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for er in errors %}
+                {{ er }}<br/>
             {% endfor %}
+            </p>
+        </div>
+    {% endif %}
+    {% if messages %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        {% for message in messages %}
+            {{ message }}<br>
+        {% endfor %}
+    </div>
+    {% endif %}
 
-            <tr><td align="center" colspan="9">
-                    <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
-                </td>
-            </tr>
-        </table>
-        <br>
-    </form>
+{% csrf_token %}
+<table class="form_table">
+    <tr>
+        <td><b style="color: #167249"> Learners </b></td>
+        {% for block in blocks %}
+            <td colspan="2"><b style="color: #167249">
+                {{ block }}
+            </b> </td>
+        {% endfor %}
+    </tr>
+    {% for result in all_results %}
+    <tr>
+        <td  align="left">
+            {{result.0.surname}}&nbsp;{{result.0.name}}<br>
+            <small>{{ result.0.email }}</small>
+        </td>
+        {% for res in result.1 %}
+            <td align="right">
+                <span aria-hidden="true"
+                {% if res.academy and res.academy > 0 %}
+                    class="glyphicon glyphicon-ok-circle"
+                    style="color: #167249" title="Academy Excellence">
+                {% else %}
+                    class="glyphicon glyphicon-remove-circle"
+                    style="color: #eb6f1f" title="Academy not passed">
+                {% endif %}
+                </span>
+            </td>
+            <td align="left">
+                <span aria-hidden="true"
+                {% if res.game and res.game > 0 %}
+                    class="glyphicon glyphicon-ok-circle" 
+                    style="color: #167249" title="Game Excellence" >
+                    
+                {% else %}
+                    class="glyphicon glyphicon-remove-circle" 
+                    style="color: #eb6f1f" title="Game not passed">
+                {% endif %}
+                </span>
+            </td>
+        {% endfor %}
+        
+    </tr>
+    {% endfor %}
+
+</table>
+<br>
+<div class="col-md-offset-5 col-md-1">
+    <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
 </div>
 
 {% endblock %}

@@ -5,4 +5,7 @@ from HotKeyStat.models import(
 )
 # Register your models here.
 
-admin.site.register([Organizations, Manager, Learner, Block, TypeResults])
+admin.site.register([
+    Organizations, Manager, Learner, Block, TypeResults, Result
+    ]
+)

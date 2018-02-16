@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE HTML>
 {% load static %}
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -9,6 +9,7 @@
     <title>User Authorization</title>
     <!-- Bootstrap -->
     <link href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/hkstat.css' %}">
 <style>
     footer {
     margin-top: 35em;
@@ -18,15 +19,6 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default">
-            <div class="navbar-header">
-                <div class='navbar-brand' href="{% url 'HotKeyStat-index' %}"> 
-                    HotKey Excellence Statistics
-                </div>
-            </div>
-    </nav>
-
-
 <div class="container">
     {% if form.errors %}
     <div class="alert alert-danger" role="alert">
@@ -34,35 +26,37 @@
     </div>
     {% endif %}
     <div class="page-header">
-        <h3 class="col-sm-offset-5"> Input </h3>
+        <img class="col-md-offset-4" src="{% static "/media/logo.png" %}" height="80" alt="HotKey Excellence">
     </div>
-<form action="{% url 'login' %}" class="form-horizontal" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="username" class="col-sm-offset-2 col-sm-2 control-label">User name:</label>
-        <div class="col-sm-3">
-                <input type="UserName" class="form-control" id="username" name="username">
+    <form action="{% url 'login' %}" class="form-horizontal" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label style="color: #167249" for="username" class="col-md-offset-2 col-md-2 control-label">User name:</label>
+            <div class="col-md-3">
+                    <input type="UserName" class="form-control" id="username" name="username">
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="password" class="col-sm-offset-2 col-sm-2 control-label">Password:</label>
-        <div class="col-sm-3">
-            <input type="password" class="form-control" id="password" name="password">
+        <div class="form-group">
+            <label style="color: #167249" for="password" class="col-md-offset-2 col-md-2 control-label">Password:</label>
+            <div class="col-md-3">
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-5 col-sm-3">
-            <button type="submit" class="btn btn-default">Come in</button>
+        <div class="form-group">
+            <div class="col-md-offset-5 col-md-3">
+                <button type="submit" class="btn btn-success" >Come in</button>
+            </div>
+            <!-- class="btn btn-success" -->
+            <!-- style="background-color:#167249" -->
         </div>
-    </div>
 
-    <input type="hidden" name="next" value="{{ next }}"/>
-</form>
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </form>
 
-<footer class="text-muted">
-    &copy; &nbsp{% now "Y" %} HotKey Excellence<br>
-    Technical Support: mvs80@rambler.ru
-</footer>
+    <footer class="text-muted">
+        &copy; &nbsp{% now "Y" %} HotKey Excellence<br>
+        Technical Support: mvs80@rambler.ru
+    </footer>
 
 </div>
 </body>

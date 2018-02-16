@@ -3,14 +3,15 @@ u'''
 Модели приложения.
 '''
 # from datetime import date, datetime, timedelta
-# from django.utils import timezone
 # from django.db.models import Count, Max, Q, Sum
 
 from django.db import models
+from django.db.models import Count, Max, Sum
 from django.utils.formats import date_format
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group
+from django.utils import timezone
 # Create your models here.
 
 
@@ -113,10 +114,10 @@ class Learner(models.Model):
         Возвращает результат ученика по топику/блоку
         '''        
         academy_res = Result.objects.filter(
-                learner=learner,
+                learner=self,
                 block=block,
                 type_result=type_res
-            ).firts()
+            ).first()
         if academy_res:
             return academy_res.key_count
         
@@ -133,7 +134,7 @@ class Block(models.Model):
         verbose_name=u'Parent block',
         null=True, blank=True
     )
-    num = models.PositiveIntegerField(u'Block number block in the group')
+    num = models.CharField(u'Block number block in the group', max_length=10)
     name = models.CharField(u'Block name', max_length=100)
     key_max = models.PositiveIntegerField(u'Maximum number of keys per block', null=False, blank=False)
     number = models.CharField(u'Block id', null=False, max_length=5, blank=False, unique=True)
@@ -165,17 +166,21 @@ class Block(models.Model):
         Возвращает процент по блоку в разделе Академия или Игра (type_result)
         '''
         percent = 0
-        learner_key_count = None
+        learner_key_count = 0
+
         # максимальное количество ключей
         key_max = self.key_max
         # количество ключей у ученика
-        learner_key_count = Result.objects.filter(
+        learner_result = Result.objects.filter(
             learner=learner,
             type_result=type_result,
             block=self
         ).first()
-        if learner_key_count and key_max and key_max != 0:
-            percent = 100.00*learner_key_count/key_max
+
+        if learner_result:
+            learner_key_count = learner_result.key_count
+        if key_max and key_max != 0:
+            percent = 100.00*(learner_key_count/key_max)
         
         return percent
 
@@ -203,9 +208,10 @@ class Result(models.Model):
     learner = models.ForeignKey(Learner, verbose_name=u'Learner results', null=False, blank=False)
     block = models.ForeignKey(Block, verbose_name=u'on the block', null=False, blank=False)
     type_result = models.ForeignKey(TypeResults, verbose_name=u'result type')
-    date_result = models.DateField(u'Date of result')
-    key_count = models.PositiveIntegerField(u'number of keys', default=0)
-    correct = models.PositiveIntegerField(u'the number of correct answers', default=0)
+    date_result = models.DateField(u'Date of result', null=True, default=timezone.now())
+    key_count = models.PositiveIntegerField(u'count of keys', default=0)
+    correct = models.PositiveIntegerField(u'count of correct answers', default=0)
+    total = models.PositiveIntegerField(u'count of total answers', default=0)
     time_result = models.FloatField(u'result time', blank=True, null=True)
 
     class Meta:
@@ -220,29 +226,34 @@ class Result(models.Model):
     def save(self, *args, **kwargs):
         super(Result, self).save(*args, **kwargs)
 
-        # Пересчитываем количество ключей по род. блокам.
-        result_parent, _ = Result.objects.get_or_create(
-            learner=self.learner,
-            block=self.block.parent,
-            type_result=self.type_result
-        )
-        if result_parent is not None:
-            result_parent.recalculate()
+        if self.block.parent:
+            # Пересчитываем количество ключей по род. блокам.
+            result_parent, _ = Result.objects.get_or_create(
+                learner=self.learner,
+                block=self.block.parent,
+                type_result=self.type_result
+            )
+            date_result = self.date_result
+            if result_parent is not None:
+                # try:
+                result_parent.recalculate(date_result)
+                # except:
+                #     pass
             
-    def recalculate(self):
+    def recalculate(self, date_res):
         u'''
         Пересчитывает количество ключей в родительском топике.
         '''
         totals = Result.objects.filter(
             learner=self.learner,
             type_result=self.type_result,
-            parent=self
+            block__in=self.block.block_set.all()
         ).aggregate(
-            keys_count=Sum('key_count')
+            key_count=Sum('key_count')
         )
-        self.key_count = totals["votes"] or 0
+
+        self.key_count = totals["key_count"] or 0
+        self.date_result = date_res
         self.save()
-
-
 
  

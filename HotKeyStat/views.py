@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.db.models import Max, Count, Sum, Avg
 
 from HotKeyStat.models import (
     Learner, Block, TypeResults, Result, Organizations, Manager
@@ -19,7 +20,14 @@ def index(request):
         return redirect('login')
 
     user = request.user
-    return render(request, 'index.html')
+    manager = user.manager
+    # Проверяем права доступа текущего менеджера.
+    if manager is None:
+        return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
+    org = manager.org
+    return render(request, 'index.html', {
+        'org': org,
+    })
 
 
 def progress(request):
@@ -28,7 +36,7 @@ def progress(request):
     '''
     user = request.user
     manager = user.manager
-    # Проверяем права доступа текущего наблюдателя.
+    # Проверяем права доступа текущего менеджера.
     if manager is None:
         return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
 
@@ -56,12 +64,12 @@ def progress(request):
                 headers.append(block)
             academy_percent = block.get_percent_block(learner, academy_type)
             game_percent = block.get_percent_block(learner, game_type)
-            results.append(academy_percent)
-            results.append(game_percent)
+            results.append( 
+                {"academy": academy_percent, "game": game_percent}
+            )
         learner_results.append(results)
         all_results.append(learner_results)
-    # print(learner_results) 
-    # print(all_results)       
+    
     return render(request, 'progress.html', {
         'blocks': parent_blocks,
         'all_results': all_results,
@@ -82,9 +90,9 @@ def progress_block(request, block_id):
     # Списки учеников, результаты которых доступны текущему проверяющему:
     learners = manager.get_learner_list()
     # блок, топики которого мы раскрываем
-    parent_block = Block.get_object_or_404(id=block_id)
+    parent_block = get_object_or_404(Block, id=block_id)
     # Списки топиков родительского блока
-    topics = Block.get_topic()
+    topics = parent_block.get_topic()
 
     academy_type = TypeResults.objects.get(code=0)
     game_type = TypeResults.objects.get(code=1)
@@ -106,8 +114,9 @@ def progress_block(request, block_id):
                 headers.append(topic)
             academy_key = learner.get_result(topic, academy_type)
             game_key = learner.get_result(topic, game_type)
-            results.append(academy_key)
-            results.append(game_key)
+            results.append( 
+                {"academy": academy_key, "game": game_key}
+            )
         learner_results.append(results)
         all_results.append(learner_results)
     
@@ -120,10 +129,67 @@ def progress_block(request, block_id):
 
 def module_details(request):
     u'''
-    отчет Детали1
+    отчет Сводный по блокам (mix-game)
     '''
+    user = request.user
+    manager = user.manager
+    # Проверяем права доступа текущего менеджера.
+    if manager is None:
+        return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
 
-    return render(request, 'index.html')
+    # Списки учеников, результаты которых доступны текущему проверяющему:
+    learners = manager.get_learner_list()
+    learner_count = len(learners)
+    # Списки родительских блоков
+    parent_blocks = Block.get_parent_block()
+    mixgame_type = TypeResults.objects.get(code=2)
+
+
+    headers = [u'Blocks', u'average time', u'Answers(correct/incorrect)', u'%']
+    all_results = []
+
+    for block in parent_blocks:
+        # среднее кол-во правильных ответов по блоку
+        avg_correct_count = 0
+        avg_total_count = 0
+        incorrect_count = 0
+        block_time = 0
+        
+        block_results = Result.objects.filter(
+            learner__in=learners,
+            block=block,
+            type_result=mixgame_type
+        )
+        block_time = block_results.aggregate(Avg('time_result'))['time_result__avg']
+        correct_count = block_results.aggregate(Sum('correct'))['correct__sum']
+        total_count = block_results.aggregate(Sum('total'))['total__sum']
+        if total_count and  correct_count:
+            incorrect_count = total_count - correct_count
+        # среднее кол-во правильных ответов
+        if learner_count and learner_count>0 and correct_count:
+            avg_correct_count = correct_count//learner_count
+        # среднее кол-во всего ответов
+        if learner_count and learner_count>0 and total_count:
+            avg_total_count = total_count//learner_count
+        # среднее кол-во неправильных ответов
+        if learner_count and learner_count>0 and incorrect_count:
+            incorrect_count = incorrect_count//learner_count
+        # процент
+        block_percent = 0
+        if avg_total_count > 0:
+            block_percent = 100.00 * (avg_correct_count/avg_total_count)
+        all_results.append([block, {
+            'block_time': block_time,
+            'correct_count': avg_correct_count,
+            'incorrect_count': incorrect_count,
+            'block_percent': block_percent}
+        ])
+
+
+    return render(request, 'module_detail.html', {
+        'all_results': all_results,
+        'headers': headers
+    })
 
 
 def learner_details(request):

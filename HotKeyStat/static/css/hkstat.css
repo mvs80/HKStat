@@ -1,4 +1,4 @@
-h1, h2, h3 {
+h2, h1 {
     color: #167249;
 }
 a {
@@ -33,14 +33,18 @@ a:hover{
     border-color: #167249;
     color: #ffffff
 }
-.my_button {
-    width: 320px;
-    height: 27px;
+.btn-success {
+    background-color: #167249;
+    color: #ffffff
+}
+.btn-success:hover {
+    background-color: #eb6f1f;
+    color: #ffffff
 }
 table.form_table {
     margin: 0 auto;
     min-width: 600px;
-    width: 50%;
+    width: 80%;
     border: 0;
     border-spacing: 0;
 }
@@ -52,6 +56,23 @@ table.form_table tr:nth-child(even) {
 }
 table.form_table th,
 table.form_table td {
+    padding: 6px;
+}
+table.menu_table {
+    margin: 0 auto;
+    min-width: 600px;
+    width: 50%;
+    border: 0;
+    border-spacing: 0;
+}
+table.menu_table tr:nth-child(odd) {
+    background: #E8E8E8;
+}
+table.menu_table tr:nth-child(even) {
+    background: #ffffff;
+}
+table.menu_table th,
+table.menu_table td {
     padding: 6px;
 }
 .center {
