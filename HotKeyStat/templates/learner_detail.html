@@ -3,13 +3,15 @@
 
 {% block breadcrumbs %}
     <li><a href="{% url 'HotKeyStat-index' %}">Home</a> </li>
-    <li class='active'>Module details</li>
+    <li><a href="{% url 'hkstat-module-details' %}">Module details</a> </li>
+    <li class='active'>Learner details</li>
 {% endblock %}
 
 {% block page_header %}
     <h2 align="center">
         <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> &nbsp;
-        Module details
+        Learner details<br>
+        <small>{{ block_name }}</small>
     </h2>
 {% endblock %}
 
@@ -44,12 +46,10 @@
         {% endfor %}
     </tr>
 
-    {% for block, results in all_results %}
+    {% for learner, results in all_results %}
     <tr>
         <td align="left">
-            <b><a href="{% url 'hkstat-learner-details' block.id %}">
-                {{ block }}
-            </a></b>
+            <b> {{ learner }} </b>
         </td>
         <td align="center">
             {% if results.block_time %}
@@ -64,10 +64,10 @@
         <td align="center">
             {{results.block_percent|floatformat:2}}%
         </td>
-        
     </tr>
     {% endfor %}
 </table>
+<br>
 <div class="col-md-offset-5 col-md-1">
     <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
 </div>

@@ -154,30 +154,33 @@ def module_details(request):
         avg_total_count = 0
         incorrect_count = 0
         block_time = 0
+        block_percent = 0
         
         block_results = Result.objects.filter(
             learner__in=learners,
             block=block,
             type_result=mixgame_type
         )
-        block_time = block_results.aggregate(Avg('time_result'))['time_result__avg']
-        correct_count = block_results.aggregate(Sum('correct'))['correct__sum']
-        total_count = block_results.aggregate(Sum('total'))['total__sum']
-        if total_count and  correct_count:
-            incorrect_count = total_count - correct_count
-        # среднее кол-во правильных ответов
-        if learner_count and learner_count>0 and correct_count:
-            avg_correct_count = correct_count//learner_count
-        # среднее кол-во всего ответов
-        if learner_count and learner_count>0 and total_count:
-            avg_total_count = total_count//learner_count
-        # среднее кол-во неправильных ответов
-        if learner_count and learner_count>0 and incorrect_count:
-            incorrect_count = incorrect_count//learner_count
-        # процент
-        block_percent = 0
-        if avg_total_count > 0:
-            block_percent = 100.00 * (avg_correct_count/avg_total_count)
+        learner_count = len(block_results)
+        if block_results:
+            block_time = block_results.aggregate(Avg('time_result'))['time_result__avg']
+            correct_count = block_results.aggregate(Sum('correct'))['correct__sum']
+            total_count = block_results.aggregate(Sum('total'))['total__sum']
+            if total_count and  correct_count:
+                incorrect_count = total_count - correct_count
+            # среднее кол-во правильных ответов
+            if learner_count and learner_count>0 and correct_count:
+                avg_correct_count = correct_count//learner_count
+            # среднее кол-во всего ответов
+            if learner_count and learner_count>0 and total_count:
+                avg_total_count = total_count//learner_count
+            # среднее кол-во неправильных ответов
+            if learner_count and learner_count>0 and incorrect_count:
+                incorrect_count = incorrect_count//learner_count
+            # процент
+            if avg_total_count > 0:
+                block_percent = 100.00 * (avg_correct_count/avg_total_count)
+
         all_results.append([block, {
             'block_time': block_time,
             'correct_count': avg_correct_count,
@@ -185,16 +188,66 @@ def module_details(request):
             'block_percent': block_percent}
         ])
 
-
     return render(request, 'module_detail.html', {
         'all_results': all_results,
         'headers': headers
     })
 
 
-def learner_details(request):
+def learner_details(request, block_id):
     u'''
-    отчет Детали2
+    отчет Сводный по ученикам
     '''
+    user = request.user
+    manager = user.manager
+    # Проверяем права доступа текущего менеджера.
+    if manager is None:
+        return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
 
-    return render(request, 'index.html')
+    # Списки учеников, результаты которых доступны текущему проверяющему:
+    learners = manager.get_learner_list()
+    # Текущий блок
+    block = get_object_or_404(Block, id=block_id)
+    mixgame_type = TypeResults.objects.get(code=2)
+    headers = [u'Learner', u'average time', u'Answers(correct/incorrect)', u'%']
+    all_results = []
+
+    for learner in learners:
+        # кол-во правильных ответов по блоку
+        correct_count = 0
+        total_count = 0
+        incorrect_count = 0
+        block_time = 0
+        block_percent = 0
+        
+        learner_result = Result.objects.filter(
+            learner=learner,
+            block=block,
+            type_result=mixgame_type
+        ).first()
+
+        if learner_result:
+            block_time = learner_result.time_result
+            correct_count = learner_result.correct
+            total_count = learner_result.total
+            if total_count and  correct_count:
+                incorrect_count = total_count - correct_count
+        
+            # процент
+            if total_count > 0:
+                block_percent = 100.00 * (correct_count/total_count)
+
+        all_results.append([learner, {
+            'block_time': block_time,
+            'correct_count': correct_count,
+            'incorrect_count': incorrect_count,
+            'block_percent': block_percent}
+        ])
+
+    return render(request, 'learner_detail.html', {
+        'all_results': all_results,
+        'headers': headers, 
+        'block_name': block,
+    })
+
+
