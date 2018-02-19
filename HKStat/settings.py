@@ -74,14 +74,25 @@ WSGI_APPLICATION = 'HKStat.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'HKStat',
+#         'USER': 'postgres',           # Not used with sqlite3.
+#         'PASSWORD': 'postgres',       # Not used with sqlite3.
+#         'HOST': '127.0.0.1',          # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT': '5432',               # Set to empty string for default. Not used with sqlite3.
+#         'ATOMIC_REQUESTS': True,
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'HKStat',
-        'USER': 'postgres',           # Not used with sqlite3.
-        'PASSWORD': 'postgres',       # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'hotkeyex_stat',
+        'USER': 'hotkeyex_stat',           # Not used with sqlite3.
+        'PASSWORD': 'musik1980',       # Not used with sqlite3.
         'HOST': '127.0.0.1',          # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5432',               # Set to empty string for default. Not used with sqlite3.
+        'PORT': '3306',               # Set to empty string for default. Not used with sqlite3.
         'ATOMIC_REQUESTS': True,
     }
 }

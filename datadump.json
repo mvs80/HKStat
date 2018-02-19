@@ -1,0 +1,1808 @@
+[
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 4,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 4,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 4,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 5,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 5,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 5,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 6,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 6,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 6,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can add Block",
+    "content_type": 7,
+    "codename": "add_block"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can change Block",
+    "content_type": 7,
+    "codename": "change_block"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can delete Block",
+    "content_type": 7,
+    "codename": "delete_block"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can add Learner",
+    "content_type": 8,
+    "codename": "add_learner"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can change Learner",
+    "content_type": 8,
+    "codename": "change_learner"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can delete Learner",
+    "content_type": 8,
+    "codename": "delete_learner"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add Manager",
+    "content_type": 9,
+    "codename": "add_manager"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change Manager",
+    "content_type": 9,
+    "codename": "change_manager"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete Manager",
+    "content_type": 9,
+    "codename": "delete_manager"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can add Organization",
+    "content_type": 10,
+    "codename": "add_organizations"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can change Organization",
+    "content_type": 10,
+    "codename": "change_organizations"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can delete Organization",
+    "content_type": 10,
+    "codename": "delete_organizations"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can add LearnerResult",
+    "content_type": 11,
+    "codename": "add_result"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can change LearnerResult",
+    "content_type": 11,
+    "codename": "change_result"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can delete LearnerResult",
+    "content_type": 11,
+    "codename": "delete_result"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can add TypeResults",
+    "content_type": 12,
+    "codename": "add_typeresults"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can change TypeResults",
+    "content_type": 12,
+    "codename": "change_typeresults"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can delete TypeResults",
+    "content_type": 12,
+    "codename": "delete_typeresults"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$3vDivU18x4uf$nDIXoLvCgLDENjntJBFCaxAeoCYWB7yGX0jKAZrvDqg=",
+    "last_login": "2018-02-16T07:22:55.179Z",
+    "is_superuser": true,
+    "username": "mvs80",
+    "first_name": "Marina",
+    "last_name": "Ufimtseva",
+    "email": "mvs80@rambler.ru",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-02-12T12:57:05Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$qlMW927hRYC0$2o+HFb9Eft5iFShevRYs8ZweKJfLtMgOQNRnNfOBtNQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Tatiana_Ufimtseva",
+    "first_name": "Tatiana",
+    "last_name": "Ufimtseva",
+    "email": "tufimtceva@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-02-12T16:58:53Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "s1nxofokc1s2zw815blsgipa9amlvhi8",
+  "fields": {
+    "session_data": "NmE0ZTkxMjU3ZGU3ZTUyY2Y4YWVmMjI0YzY5ZTEwMmE1ZTM2ZDZmNjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNGMxY2ExZjQ3Nzc2NmY0YjgxOWYzODU3MGJjMTg3MTkyMjc1NmRhIn0=",
+    "expire_date": "2018-02-27T08:17:30.039Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "u8f09geg5ixx9dk6hx4zva6au2fvv3fy",
+  "fields": {
+    "session_data": "NmE0ZTkxMjU3ZGU3ZTUyY2Y4YWVmMjI0YzY5ZTEwMmE1ZTM2ZDZmNjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNGMxY2ExZjQ3Nzc2NmY0YjgxOWYzODU3MGJjMTg3MTkyMjc1NmRhIn0=",
+    "expire_date": "2018-03-02T07:22:55.183Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vwl1mh7j6nomb19wvij5ruzyiqked2pw",
+  "fields": {
+    "session_data": "NmE0ZTkxMjU3ZGU3ZTUyY2Y4YWVmMjI0YzY5ZTEwMmE1ZTM2ZDZmNjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNGMxY2ExZjQ3Nzc2NmY0YjgxOWYzODU3MGJjMTg3MTkyMjc1NmRhIn0=",
+    "expire_date": "2018-03-01T17:45:45.857Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "y30vffbteaxzsll2vgvsmi60o1tyh8yj",
+  "fields": {
+    "session_data": "NmE0ZTkxMjU3ZGU3ZTUyY2Y4YWVmMjI0YzY5ZTEwMmE1ZTM2ZDZmNjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNGMxY2ExZjQ3Nzc2NmY0YjgxOWYzODU3MGJjMTg3MTkyMjc1NmRhIn0=",
+    "expire_date": "2018-02-26T12:58:06.392Z"
+  }
+},
+{
+  "model": "HotKeyStat.organizations",
+  "pk": 1,
+  "fields": {
+    "org_parent": null,
+    "name": "MBA",
+    "is_work": true
+  }
+},
+{
+  "model": "HotKeyStat.manager",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "org": 1
+  }
+},
+{
+  "model": "HotKeyStat.manager",
+  "pk": 2,
+  "fields": {
+    "user": 1,
+    "org": 1
+  }
+},
+{
+  "model": "HotKeyStat.learner",
+  "pk": 1,
+  "fields": {
+    "org": 1,
+    "surname": "Ufimtseva",
+    "name": "Alice",
+    "email": "mvs80@rambler.ru"
+  }
+},
+{
+  "model": "HotKeyStat.learner",
+  "pk": 2,
+  "fields": {
+    "org": 1,
+    "surname": "Ufimtsev",
+    "name": "Aleksander",
+    "email": "a_ufimcev@mail.ru"
+  }
+},
+{
+  "model": "HotKeyStat.learner",
+  "pk": 3,
+  "fields": {
+    "org": 1,
+    "surname": "Ufimtseva",
+    "name": "Aliona",
+    "email": "mvs80@rambler.ru"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 1,
+  "fields": {
+    "parent": null,
+    "num": "1",
+    "name": "Commonly Used Hot Keys",
+    "key_max": 10,
+    "number": "100"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 2,
+  "fields": {
+    "parent": 1,
+    "num": "1.1",
+    "name": "Let\u2019s Begin",
+    "key_max": 1,
+    "number": "101"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 3,
+  "fields": {
+    "parent": 1,
+    "num": "1.2",
+    "name": "Navigating and Highlighting",
+    "key_max": 1,
+    "number": "102"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 4,
+  "fields": {
+    "parent": 1,
+    "num": "1.3",
+    "name": "Copy Paste",
+    "key_max": 1,
+    "number": "103"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 5,
+  "fields": {
+    "parent": 1,
+    "num": "1.4",
+    "name": "Formatting",
+    "key_max": 1,
+    "number": "104"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 6,
+  "fields": {
+    "parent": 1,
+    "num": "1.5",
+    "name": "Basic Formulas",
+    "key_max": 1,
+    "number": "105"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 7,
+  "fields": {
+    "parent": null,
+    "num": "2",
+    "name": "Ribbon Navigation",
+    "key_max": 12,
+    "number": "200"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 8,
+  "fields": {
+    "parent": 7,
+    "num": "2.1",
+    "name": "Alt File And Quick Access Toolbar",
+    "key_max": 1,
+    "number": "201"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 9,
+  "fields": {
+    "parent": 7,
+    "num": "2.2",
+    "name": "Alt Home",
+    "key_max": 1,
+    "number": "202"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 10,
+  "fields": {
+    "parent": 7,
+    "num": "2.3",
+    "name": "Print and Page Layot",
+    "key_max": 1,
+    "number": "203"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 11,
+  "fields": {
+    "parent": 7,
+    "num": "2.4",
+    "name": "Alt A - Data",
+    "key_max": 1,
+    "number": "204"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 12,
+  "fields": {
+    "parent": 7,
+    "num": "2.5",
+    "name": "Alt W - View",
+    "key_max": 1,
+    "number": "205"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 13,
+  "fields": {
+    "parent": 7,
+    "num": "2.6",
+    "name": "Alt Menu Additional",
+    "key_max": 1,
+    "number": "206"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 14,
+  "fields": {
+    "parent": null,
+    "num": "3",
+    "name": "Formulas & Functions",
+    "key_max": 12,
+    "number": "300"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 15,
+  "fields": {
+    "parent": 14,
+    "num": "3.1",
+    "name": "Basic",
+    "key_max": 1,
+    "number": "301"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 16,
+  "fields": {
+    "parent": 14,
+    "num": "3.2",
+    "name": "Intermediate",
+    "key_max": 1,
+    "number": "302"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 17,
+  "fields": {
+    "parent": 14,
+    "num": "3.3",
+    "name": "Advanced",
+    "key_max": 1,
+    "number": "303"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 18,
+  "fields": {
+    "parent": 14,
+    "num": "3.4",
+    "name": "IF Statements",
+    "key_max": 1,
+    "number": "304"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 19,
+  "fields": {
+    "parent": 14,
+    "num": "3.5",
+    "name": "Text Functions",
+    "key_max": 1,
+    "number": "305"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 20,
+  "fields": {
+    "parent": 14,
+    "num": "3.6",
+    "name": "Other Useful Functions",
+    "key_max": 1,
+    "number": "306"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 21,
+  "fields": {
+    "parent": null,
+    "num": "4",
+    "name": "Advanced Excel",
+    "key_max": 6,
+    "number": "400"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 22,
+  "fields": {
+    "parent": 21,
+    "num": "4.1",
+    "name": "Macros",
+    "key_max": 1,
+    "number": "401"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 23,
+  "fields": {
+    "parent": 21,
+    "num": "4.2",
+    "name": "Data Tables and Conditional Formatting",
+    "key_max": 1,
+    "number": "402"
+  }
+},
+{
+  "model": "HotKeyStat.block",
+  "pk": 24,
+  "fields": {
+    "parent": 21,
+    "num": "4.3",
+    "name": "Pivot Tables and Charts",
+    "key_max": 1,
+    "number": "403"
+  }
+},
+{
+  "model": "HotKeyStat.typeresults",
+  "pk": 1,
+  "fields": {
+    "name": "Academy",
+    "code": 0
+  }
+},
+{
+  "model": "HotKeyStat.typeresults",
+  "pk": 2,
+  "fields": {
+    "name": "Game",
+    "code": 1
+  }
+},
+{
+  "model": "HotKeyStat.typeresults",
+  "pk": 3,
+  "fields": {
+    "name": "MixGame",
+    "code": 2
+  }
+},
+{
+  "model": "HotKeyStat.result",
+  "pk": 13,
+  "fields": {
+    "learner": 2,
+    "block": 1,
+    "type_result": 3,
+    "date_result": "2018-02-01",
+    "key_count": 36,
+    "correct": 5,
+    "total": 10,
+    "time_result": 2.3
+  }
+},
+{
+  "model": "HotKeyStat.result",
+  "pk": 35,
+  "fields": {
+    "learner": 2,
+    "block": 2,
+    "type_result": 1,
+    "date_result": "2018-02-13",
+    "key_count": 1,
+    "correct": 5,
+    "total": 12,
+    "time_result": 3.5
+  }
+},
+{
+  "model": "HotKeyStat.result",
+  "pk": 46,
+  "fields": {
+    "learner": 2,
+    "block": 1,
+    "type_result": 1,
+    "date_result": "2018-02-13",
+    "key_count": 1,
+    "correct": 0,
+    "total": 0,
+    "time_result": null
+  }
+},
+{
+  "model": "HotKeyStat.result",
+  "pk": 47,
+  "fields": {
+    "learner": 2,
+    "block": 2,
+    "type_result": 2,
+    "date_result": "2018-02-16",
+    "key_count": 1,
+    "correct": 0,
+    "total": 0,
+    "time_result": null
+  }
+},
+{
+  "model": "HotKeyStat.result",
+  "pk": 48,
+  "fields": {
+    "learner": 2,
+    "block": 1,
+    "type_result": 2,
+    "date_result": "2018-02-16",
+    "key_count": 1,
+    "correct": 0,
+    "total": 0,
+    "time_result": null
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2018-02-12T13:02:19.225Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "1",
+    "object_repr": "Organizations object",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2018-02-12T13:02:28.083Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "1",
+    "object_repr": "Organizations object",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2018-02-12T13:04:46.103Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "1",
+    "object_repr": "Organizations object",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2018-02-12T13:40:42.250Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "TypeResults object",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2018-02-12T13:40:57.335Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "TypeResults object",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2018-02-12T13:41:08.095Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "TypeResults object",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2018-02-12T16:43:34.146Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "1. Commonly Used Hot Keys",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2018-02-12T16:44:16.879Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "1. Let\u2019s Begin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2018-02-12T16:44:39.315Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "2. Navigating and Highlighting",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2018-02-12T16:45:04.350Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "3. Copy Paste",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2018-02-12T16:45:32.249Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "5",
+    "object_repr": "4. Formatting",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2018-02-12T16:45:54.969Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "6",
+    "object_repr": "5. Basic Formulas",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2018-02-12T16:46:41.417Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "7",
+    "object_repr": "2. Ribbon Navigation",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2018-02-12T16:48:04.047Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "8",
+    "object_repr": "21. Alt File And Quick Access Toolbar",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2018-02-12T16:48:13.309Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "7",
+    "object_repr": "2. Ribbon Navigation",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"key_max\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2018-02-12T16:48:21.608Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "11. Let\u2019s Begin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2018-02-12T16:48:30.512Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "12. Navigating and Highlighting",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2018-02-12T16:48:37.067Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "13. Copy Paste",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2018-02-12T16:48:44.544Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "5",
+    "object_repr": "14. Formatting",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2018-02-12T16:48:53.797Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "6",
+    "object_repr": "15. Basic Formulas",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2018-02-12T16:49:31.908Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "9",
+    "object_repr": "22. Alt Home",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2018-02-12T16:50:05.548Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "10",
+    "object_repr": "23. Print and Page Layot",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2018-02-12T16:50:32.425Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "11",
+    "object_repr": "24. Alt A - Data",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2018-02-12T16:50:56.349Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "12",
+    "object_repr": "25. Alt W - View",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2018-02-12T16:51:35.107Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "13",
+    "object_repr": "26. Alt Menu Additional",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2018-02-12T16:52:09.642Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "14",
+    "object_repr": "3. Form&ulas & Functions",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2018-02-12T16:52:33.027Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "15",
+    "object_repr": "31. Basic",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2018-02-12T16:52:59.543Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "16",
+    "object_repr": "32. Intermediate",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2018-02-12T16:53:06.761Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "14",
+    "object_repr": "3. Formulas & Functions",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2018-02-12T16:53:37.284Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "17",
+    "object_repr": "33. Advanced",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2018-02-12T16:54:00.258Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "18",
+    "object_repr": "34. IF Statements",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2018-02-12T16:54:22.822Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "19",
+    "object_repr": "35. Text Functions",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2018-02-12T16:54:42.097Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "20",
+    "object_repr": "36. Other Useful Functions",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2018-02-12T16:55:23.035Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "21",
+    "object_repr": "4. Advanced Excel",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2018-02-12T16:55:42.545Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "22",
+    "object_repr": "41. Macros",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2018-02-12T16:56:03.413Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "23",
+    "object_repr": "42. Data Tables and Conditional Formatting",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2018-02-12T16:56:12.463Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "22",
+    "object_repr": "41. Macros",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"parent\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2018-02-12T16:56:36.536Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "24",
+    "object_repr": "43. Pivot Tables and Charts",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2018-02-12T16:58:53.700Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "Tatiana_Ufimtseva",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2018-02-12T16:59:00.388Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "Tatiana_Ufimtseva",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2018-02-12T16:59:36.036Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "1",
+    "object_repr": "Ufimtseva Marina(mvs80@rambler.ru) - MBA",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2018-02-13T08:16:37.448Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "1",
+    "object_repr": "mvs80",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"first_name\", \"last_name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2018-02-13T08:17:13.592Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "Tatiana_Ufimtseva",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"first_name\", \"last_name\", \"email\", \"is_staff\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2018-02-13T16:43:49.369Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "2",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2018-02-13T17:08:28.850Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "Ufimtseva Marina",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2018-02-13T17:08:54.742Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "1",
+    "object_repr": "Ufimtseva Alice(mvs80@rambler.ru) - MBA",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2018-02-13T17:09:12.314Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "3",
+    "object_repr": "Ufimtseva Aliona(mvs80@rambler.ru) - MBA",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2018-02-15T07:15:49.125Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "1.1. Let\u2019s Begin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2018-02-15T07:15:58.249Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "1.2. Navigating and Highlighting",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2018-02-15T07:16:08.018Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "1.3. Copy Paste",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2018-02-15T07:16:16.041Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "5",
+    "object_repr": "1.4. Formatting",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2018-02-15T07:16:23.197Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "6",
+    "object_repr": "1.5. Basic Formulas",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2018-02-15T07:16:35.936Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "8",
+    "object_repr": "2.1. Alt File And Quick Access Toolbar",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2018-02-15T07:16:44.003Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "9",
+    "object_repr": "2.2. Alt Home",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2018-02-15T07:16:54.661Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "10",
+    "object_repr": "2.3. Print and Page Layot",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2018-02-15T07:17:03.320Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "11",
+    "object_repr": "2.4. Alt A - Data",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2018-02-15T07:17:10.248Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "12",
+    "object_repr": "2.5. Alt W - View",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2018-02-15T07:17:17.287Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "13",
+    "object_repr": "2.6. Alt Menu Additional",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2018-02-15T07:17:25.819Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "15",
+    "object_repr": "3.1. Basic",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2018-02-15T07:17:33.951Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "16",
+    "object_repr": "3.2. Intermediate",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 61,
+  "fields": {
+    "action_time": "2018-02-15T07:17:41.189Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "17",
+    "object_repr": "3.3. Advanced",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 62,
+  "fields": {
+    "action_time": "2018-02-15T07:17:48.526Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "18",
+    "object_repr": "3.4. IF Statements",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 63,
+  "fields": {
+    "action_time": "2018-02-15T07:17:56.355Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "19",
+    "object_repr": "3.5. Text Functions",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 64,
+  "fields": {
+    "action_time": "2018-02-15T07:18:03.532Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "20",
+    "object_repr": "3.6. Other Useful Functions",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 65,
+  "fields": {
+    "action_time": "2018-02-15T07:18:11.129Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "22",
+    "object_repr": "4.1. Macros",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 66,
+  "fields": {
+    "action_time": "2018-02-15T07:18:28.167Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "23",
+    "object_repr": "4.2. Data Tables and Conditional Formatting",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 67,
+  "fields": {
+    "action_time": "2018-02-15T07:18:35.509Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "24",
+    "object_repr": "4.3. Pivot Tables and Charts",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"num\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 68,
+  "fields": {
+    "action_time": "2018-02-15T14:33:31.159Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "13",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 1, 2018",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 69,
+  "fields": {
+    "action_time": "2018-02-15T15:28:36.509Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 70,
+  "fields": {
+    "action_time": "2018-02-16T05:53:34.900Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 71,
+  "fields": {
+    "action_time": "2018-02-16T06:09:58.211Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"correct\", \"total\", \"time_result\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 72,
+  "fields": {
+    "action_time": "2018-02-16T06:22:47.763Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 73,
+  "fields": {
+    "action_time": "2018-02-16T07:16:45.976Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 74,
+  "fields": {
+    "action_time": "2018-02-16T07:17:53.546Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 75,
+  "fields": {
+    "action_time": "2018-02-16T07:18:43.187Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 76,
+  "fields": {
+    "action_time": "2018-02-16T07:21:05.085Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "35",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 13, 2018",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 77,
+  "fields": {
+    "action_time": "2018-02-16T07:30:13.129Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "47",
+    "object_repr": "Ufimtsev Aleksander(a_ufimcev@mail.ru) - MBA - Feb. 16, 2018",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+}
+]
