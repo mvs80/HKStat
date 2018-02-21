@@ -20,8 +20,7 @@ from HotKeyStat.views import index
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^HotKeyStat/$', index, name='HotKeyStat-index'),
-    url(r'^HotKeyStat/login/', login, {'template_name': 'login.html'}, name='login'),
-    url(r'^HotKeyStat/logout/', logout, name='logout'),
-    url(r'^HotKeyStat/', include('HotKeyStat.urls'), name='HotKeyStat'),
+    url(r'^login/', login, {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/', logout, name='logout'),
+    url(r'', include('HotKeyStat.urls'), name='HotKeyStat'),
 ]

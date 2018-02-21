@@ -1,1 +1,21 @@
 https://github.com/mvs80/HotKeyStat.git
+
+git clone https://github.com/mvs80/hotkeyStat.git
+virtualenv --python=python3.6 myvenv 
+
+Сначала загружаем код на Github
+command-line
+$ git status
+[...]
+$ git add --all .
+$ git status
+[...]
+$ git commit -m "Modified templates to display posts from database."
+[...]
+$ git push
+
+Затем заходим на PythonAnywhere, открываем Bash console и набираем команду:
+PythonAnywhere command-line
+$ cd my-first-blog
+$ git pull
+[...]
