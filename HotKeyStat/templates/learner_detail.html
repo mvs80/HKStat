@@ -35,10 +35,14 @@
 {% endif %}
 
 {% csrf_token %}
-<table class="form_table">
+<table class="table table-striped table-condensed">
     <tr>
         {% for header in headers %}
-            <td align="center"> 
+            <td 
+            {% if forloop.counter0 > 0 %}
+                align="center" 
+            {% endif %}
+            >
                 <b style="color: #167249">
                     {{ header }}
                 </b>

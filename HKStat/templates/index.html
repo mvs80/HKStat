@@ -7,7 +7,7 @@
 
 {% block page_header %}
     <h2 align="center">
-        Statistic for HotKey Excellence<br>
+        Statistics for Hot Key Excellence<br>
         <small style="color: #eb6f1f">  {{ org.name }} </small>
     </h2>
 {% endblock %}
@@ -18,11 +18,11 @@
         <div class="list-group" align="center">
             <a href="{% url 'hkstat-progress' %}" class="list-group-item" style="font-size:20px" >
                 <span class="glyphicon glyphicon-education" aria-hidden="true"></span> 
-                Progress Overview
+                Learner Progress
             </a>
             <a href="{% url 'hkstat-module-details' %}" class="list-group-item" style="font-size:20px">
                 <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> &nbsp;
-                Module details
+                Module Details
             </a>
             {% comment %}
             <a href="{% url 'hkstat-learner-details' %}" class="list-group-item" style="font-size:20px">

@@ -47,6 +47,7 @@ table.form_table {
     width: 80%;
     border: 0;
     border-spacing: 0;
+    /* table-layout: fixed; */
 }
 table.form_table tr:nth-child(odd) {
     background: #fff;
@@ -58,6 +59,7 @@ table.form_table th,
 table.form_table td {
     padding: 6px;
 }
+
 table.menu_table {
     margin: 0 auto;
     min-width: 600px;

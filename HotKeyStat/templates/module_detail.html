@@ -3,13 +3,13 @@
 
 {% block breadcrumbs %}
     <li><a href="{% url 'HotKeyStat-index' %}">Home</a> </li>
-    <li class='active'>Module details</li>
+    <li class='active'>Module Details</li>
 {% endblock %}
 
 {% block page_header %}
     <h2 align="center">
         <span class="glyphicon glyphicon-signal" aria-hidden="true"></span> &nbsp;
-        Module details
+        Module Details
     </h2>
 {% endblock %}
 
@@ -33,10 +33,15 @@
 {% endif %}
 
 {% csrf_token %}
-<table class="form_table">
+<!-- <table class="form_table"> -->
+<table class="table table-striped table-condensed">
     <tr>
         {% for header in headers %}
-            <td align="center"> 
+        <td 
+        {% if forloop.counter0 > 0 %}
+            align="center" 
+        {% endif %}
+        >
                 <b style="color: #167249">
                     {{ header }}
                 </b>
@@ -64,12 +69,32 @@
         <td align="center">
             {{results.block_percent|floatformat:2}}%
         </td>
+        <td align="center" width="20%">
+            <div class="progress">
+                <div 
+                {% if results.block_percent >= 50 %}
+                    class="progress-bar progress-bar-success" 
+                {% elif  results.block_percent > 20 %}
+                    class="progress-bar progress-bar-warning"
+                {% else %}
+                    class="progress-bar progress-bar-danger"
+                {% endif %}
+                role="progressbar" 
+                    aria-valuenow={{results.block_percent}}
+                    aria-valuemin="0"
+                    aria-valuemax="100" 
+                    style="min-width: 3em; width: {{results.block_percent|floatformat:2}}%">
+                    {{results.block_percent|floatformat:2}}%
+                </div>
+            </div>
+            
+        </td>
         
     </tr>
     {% endfor %}
 </table>
 <div class="col-md-offset-5 col-md-1">
-    <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
+    <input type='submit' class='btn btn-success' name='print' value='Export to Excel' />
 </div>
 
 

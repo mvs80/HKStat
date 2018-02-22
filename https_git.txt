@@ -1,6 +1,6 @@
-https://github.com/mvs80/HotKeyStat.git
+https://github.com/mvs80/HKStat.git
 
-git clone https://github.com/mvs80/hotkeyStat.git
+git clone https://github.com/mvs80/HKStat.git
 virtualenv --python=python3.6 myvenv 
 
 Сначала загружаем код на Github

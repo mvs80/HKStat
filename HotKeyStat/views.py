@@ -145,7 +145,7 @@ def module_details(request):
     mixgame_type = TypeResults.objects.get(code=2)
 
 
-    headers = [u'Blocks', u'average time', u'Answers(correct/incorrect)', u'%']
+    headers = [u'Topics', u'Average Time Spent', u'Answers(correct/incorrect)', u'%', u'Graph']
     all_results = []
 
     for block in parent_blocks:
