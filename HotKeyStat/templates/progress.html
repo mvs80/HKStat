@@ -37,36 +37,75 @@
 <!-- <table class="form_table"> -->
 <table class="table table-striped table-condensed">
     <tr>
-        <td><b style="color: #167249">Learners </b></td>
         {% for header in headers %}
-            <td colspan="2" align="center"> <b>
-                <a href="{% url 'hkstat-progress-block' header.id %}">
-                    {{ header }}
+            <td width="25%"
+            {% if forloop.counter0 > 0 %}
+                align="center" 
+            {% endif %}
+            {% if forloop.counter0 == 2 %}
+                colspan="3" >
+                <b>
+                    <a href="{% url 'hkstat-progress-block'%}">
+                        {{ header }}+<br>
                 </a></b>
+            {% else %}
+                >
+                    <b style="color: #167249">{{ header }}<br></b>
+            {% endif %}
             </td>
         {% endfor %}
     </tr>
-    {% for result in all_results %}
+    <tr></tr>
+    <tr>
+        <td></td><td></td>
+        <td align="right"><span class="glyphicon glyphicon-education" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
+        <td align="center"><span class="glyphicon glyphicon-gift" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
+        <td align="left"><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
+        <td></td>
+    </tr>
+    {% for learner, result in all_results %}
     <tr>
         <td align="left">
-            {{result.0.surname}}&nbsp;{{result.0.name}}<br>
-            <small>{{ result.0.email }}</small>
+            {{learner.surname}}&nbsp;{{learner.name}}&nbsp;
+            <small>{{ learner.email }}</small>
         </td>
-        {% for res in result.1 %}
-            <td align="right" style="color: #167249" title="Academy">
-                {{res.academy}}%
-            </td>
-            <td align="left" style="color: #eb6f1f" title="Game">
-                {{res.game}}%
-            </td>
-        {% endfor %}
-        
+        <td align="center">
+            {{learner.date_reg|date:"d.m.Y"}}
+        </td>
+        <td align="right" style="color: #167249" title="Academy">
+            {{result.academy|floatformat:2}}%
+        </td>
+        <td align="center" style="color: #eb6f1f" title="Game">
+            {{result.game|floatformat:2}}%
+        </td>
+        <td align="left" style="color: #443c36" title="Mix Game">
+            {{result.mixgame|floatformat:2}}%
+        </td>
+        <td>
+            <div class="progress">
+                    <div 
+                    {% if result.all_percent >= 60 %}
+                        class="progress-bar progress-bar-success" 
+                    {% elif  result.all_percent > 20 %}
+                        class="progress-bar progress-bar-warning"
+                    {% else %}
+                        class="progress-bar progress-bar-danger"
+                    {% endif %}
+                    role="progressbar" 
+                        aria-valuenow={{result.all_percent}}
+                        aria-valuemin="0"
+                        aria-valuemax="100" 
+                        style="min-width: 3em; width: {{result.all_percent|floatformat:2}}%">
+                        {{result.all_percent|floatformat:2}}%
+                    </div>
+                </div>
+        </td>
     </tr>
     {% endfor %}
 </table>
 <br>
 <div class="col-md-offset-5 col-md-1">
-    <input type='submit' class='btn btn-success' name='print' value='Export to Excel' />
+        <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
 </div>
 
 {% endblock %}

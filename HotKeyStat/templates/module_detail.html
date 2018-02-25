@@ -33,13 +33,15 @@
 {% endif %}
 
 {% csrf_token %}
-<!-- <table class="form_table"> -->
 <table class="table table-striped table-condensed">
     <tr>
         {% for header in headers %}
         <td 
         {% if forloop.counter0 > 0 %}
             align="center" 
+        {% endif %}
+        {% if forloop.counter0 == 2 %}
+            colspan="2"
         {% endif %}
         >
                 <b style="color: #167249">
@@ -57,34 +59,36 @@
             </a></b>
         </td>
         <td align="center">
-            {% if results.block_time %}
-                {{results.block_time}}
-            {% else %}
-                -
-            {% endif %}
+            {{results.time}}
         </td>
-        <td align="center">
-            {{results.correct_count}}/{{results.incorrect_count}}
+        {% if block.number_block != '500' %}
+            <td align="right" title="Academy" style="color:#eb6f1f">
+                {{results.academy|floatformat:2}}
+            </td>
+            <td align="left" title="Game" style="color:#167249">
+        {% endif %}
+        {% if block.number_block == '500' %}  
+            <td align="center" title="Game" colspan="2">
+        {% endif %}
+            {{results.game|floatformat:2}}
         </td>
-        <td align="center">
-            {{results.block_percent|floatformat:2}}%
-        </td>
+
         <td align="center" width="20%">
             <div class="progress">
                 <div 
-                {% if results.block_percent >= 50 %}
+                {% if results.result_all >= 50 %}
                     class="progress-bar progress-bar-success" 
-                {% elif  results.block_percent > 20 %}
+                {% elif  results.result_all > 20 %}
                     class="progress-bar progress-bar-warning"
                 {% else %}
                     class="progress-bar progress-bar-danger"
                 {% endif %}
                 role="progressbar" 
-                    aria-valuenow={{results.block_percent}}
+                    aria-valuenow={{results.result_all}}
                     aria-valuemin="0"
                     aria-valuemax="100" 
-                    style="min-width: 3em; width: {{results.block_percent|floatformat:2}}%">
-                    {{results.block_percent|floatformat:2}}%
+                    style="min-width: 3em; width: {{results.result_all|floatformat:2}}%">
+                    {{results.result_all|floatformat:2}}%
                 </div>
             </div>
             
@@ -94,7 +98,7 @@
     {% endfor %}
 </table>
 <div class="col-md-offset-5 col-md-1">
-    <input type='submit' class='btn btn-success' name='print' value='Export to Excel' />
+        <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
 </div>
 
 
