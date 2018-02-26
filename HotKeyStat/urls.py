@@ -7,6 +7,6 @@ urlpatterns = [
     url(r"^ProgressOverview/block/$", views.progress_block, name='hkstat-progress-block'),
     url(r"^ProgressOverview/block/(?P<block_id>\d+)/$", views.progress_topic, name='hkstat-progress-topic'),
     url(r'^ModuleDetails/$', views.module_details, name='hkstat-module-details'),
-    url(r"^ModuleDetails/block/(?P<block_id>\d+)/$", views.learner_details, name='hkstat-learner-details'),
+    url(r"^ModuleDetails/block/(?P<block_id>\d+)/$", views.block_details, name='hkstat-block-details'),
     # url(r'^LearnerDetails/$', views.learner_details, name='hkstat-learner-details'),
 ]

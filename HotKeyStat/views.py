@@ -230,8 +230,6 @@ def module_details(request):
     if manager is None:
         return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
 
-    # Списки учеников, результаты которых доступны текущему проверяющему:
-    # learners = manager.get_learner_list()
     # Списки родительских блоков
     parent_blocks = Block.get_parent_block()
 
@@ -239,7 +237,6 @@ def module_details(request):
     academy_type = TypeResults.objects.get(code=0)
     game_type = TypeResults.objects.get(code=1)
     mixgame_type = TypeResults.objects.get(code=2)
-
 
     headers = [u'Topics', u'Average Time Spent', u'%', u'Graph']
     all_results = []
@@ -277,9 +274,10 @@ def module_details(request):
         'headers': headers,
     })
 
-def module_details_old(request):
+
+def block_details(request, block_id):
     u'''
-    отчет Сводный по блокам 
+    отчет Сводный по topics
     '''
     user = request.user
     manager = user.manager
@@ -289,119 +287,51 @@ def module_details_old(request):
 
     # Списки учеников, результаты которых доступны текущему проверяющему:
     learners = manager.get_learner_list()
-    learner_count = len(learners)
-    # Списки родительских блоков
-    parent_blocks = Block.get_parent_block()
+    # блок, топики которого мы раскрываем
+    parent_block = get_object_or_404(Block, id=block_id)
+    # Списки топиков родительского блока
+    topics = parent_block.get_topic()
 
     # типы результатов
     academy_type = TypeResults.objects.get(code=0)
     game_type = TypeResults.objects.get(code=1)
     mixgame_type = TypeResults.objects.get(code=2)
 
-
     headers = [u'Topics', u'Average Time Spent', u'%', u'Graph']
     all_results = []
 
-    for block in parent_blocks:
-        # среднее кол-во правильных ответов по блоку
-        avg_correct_count = 0
-        avg_total_count = 0
-        incorrect_count = 0
-        block_time = 0
-        block_percent = 0
-        
-        block_results = Result.objects.filter(
-            learner__in=learners,
-            block=block,
-            type_result=mixgame_type
-        )
-        learner_count = len(block_results)
-        if block_results:
-            block_time = block_results.aggregate(Avg('time_result'))['time_result__avg']
-            correct_count = block_results.aggregate(Sum('correct'))['correct__sum']
-            total_count = block_results.aggregate(Sum('total'))['total__sum']
-            if total_count and  correct_count:
-                incorrect_count = total_count - correct_count
-            # среднее кол-во правильных ответов
-            if learner_count and learner_count>0 and correct_count:
-                avg_correct_count = correct_count//learner_count
-            # среднее кол-во всего ответов
-            if learner_count and learner_count>0 and total_count:
-                avg_total_count = total_count//learner_count
-            # среднее кол-во неправильных ответов
-            if learner_count and learner_count>0 and incorrect_count:
-                incorrect_count = incorrect_count//learner_count
-            # процент
-            if avg_total_count > 0:
-                block_percent = 100.00 * (avg_correct_count/avg_total_count)
+    for topic in topics:
+        result_academy = 0
+        result_game = 0
+        result_all = 0
 
-        all_results.append([block, {
-            'block_time': block_time,
-            'correct_count': avg_correct_count,
-            'incorrect_count': incorrect_count,
-            'block_percent': block_percent}
-        ])
+        topic_result = []
+        topic_result.append(topic)
+        if topic.number_block != '500':
+            topic_time = 0
+            topic_time = topic.get_time_block(manager, game_type)
+            result_academy = topic.get_avgresult_block(manager, academy_type)
+            result_game = topic.get_avgresult_block(manager, game_type)
+            # общий процент по блоку
+            result_all = (result_academy + result_game)/2
+        else:
+            result_game = topic.get_avgresult_block(manager, mixgame_type)
+            # общий процент по блоку
+            result_all = result_game
 
-    return render(request, 'module_detail.html', {
-        'all_results': all_results,
-        'headers': headers
-    })
+        topic_result.append({
+                "time": topic_time, 
+                "academy": result_academy, 
+                "game": result_game,
+                "result_all": result_all,
+            })
 
+        all_results.append(topic_result)
 
-def learner_details(request, block_id):
-    u'''
-    отчет Сводный по ученикам
-    '''
-    user = request.user
-    manager = user.manager
-    # Проверяем права доступа текущего менеджера.
-    if manager is None:
-        return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
-
-    # Списки учеников, результаты которых доступны текущему проверяющему:
-    learners = manager.get_learner_list()
-    # Текущий блок
-    block = get_object_or_404(Block, id=block_id)
-    mixgame_type = TypeResults.objects.get(code=2)
-    headers = [u'Learner', u'average time', u'Answers(correct/incorrect)', u'%']
-    all_results = []
-
-    for learner in learners:
-        # кол-во правильных ответов по блоку
-        correct_count = 0
-        total_count = 0
-        incorrect_count = 0
-        block_time = 0
-        block_percent = 0
-        
-        learner_result = Result.objects.filter(
-            learner=learner,
-            block=block,
-            type_result=mixgame_type
-        ).first()
-
-        if learner_result:
-            block_time = learner_result.time_result
-            correct_count = learner_result.correct
-            total_count = learner_result.total
-            if total_count and  correct_count:
-                incorrect_count = total_count - correct_count
-        
-            # процент
-            if total_count > 0:
-                block_percent = 100.00 * (correct_count/total_count)
-
-        all_results.append([learner, {
-            'block_time': block_time,
-            'correct_count': correct_count,
-            'incorrect_count': incorrect_count,
-            'block_percent': block_percent}
-        ])
-
-    return render(request, 'learner_detail.html', {
+    return render(request, 'topic_detail.html', {
         'all_results': all_results,
         'headers': headers, 
-        'block_name': block,
+        'parent_block': parent_block,
     })
 
 
