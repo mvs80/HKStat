@@ -3,16 +3,23 @@
 
 {% block breadcrumbs %}
     <li><a href="{% url 'HotKeyStat-index' %}">Home</a> </li>
-    <li><a href="{% url 'hkstat-progress' %}">Learner Progress(main)</a> </li>
-    <li><a href="{% url 'hkstat-progress-block' %}">Learner Progress(detail)</a> </li>
+    <li><a href="{% url 'hkstat-progress' %}{% if date_from %}?date_from={{date_from}}{% endif %}{% if date_by and date_from %}&date_by={{date_by}}{% elif date_by %}?date_by={{date_by}}{% endif %}">
+        Learner Progress(main)</a> </li>
+    <li><a href="{% url 'hkstat-progress-block'%}{% if date_from %}?date_from={{date_from}}{% endif %}{% if date_by and date_from %}&date_by={{date_by}}{% elif date_by %}?date_by={{date_by}}{% endif %}">
+        Learner Progress(detail)</a> </li>
     <li class='active'>{{ blocks.0.parent.name }} </li>
 {% endblock %}
 
 {% block page_header %}
     <h2 align="center">
         <span class="glyphicon glyphicon-education" aria-hidden="true"></span> &nbsp;
-        Learner Progress<br>
-        <small>{{ blocks.0.parent.name }}</small>
+        Learner Progress
+        <small> ({{ blocks.0.parent.name }})
+            {% if date_from or date_by %}    
+                <br>
+                <a style="color:#eb6f1f"> {{ date_from_s|default_if_none:"nothing"}} -  {{date_by_s|default_if_none:"nothing"}}  </a>
+            {% endif %}
+        </small>
     </h2>
 {% endblock %}
 
@@ -39,13 +46,36 @@
 <!-- <table class="form_table"> -->
 <table class="table table-striped table-condensed">
     <tr>
-        <td><b style="color: #167249"> Learners </b></td>
+        <td>
+            <b>
+                {% if order == "surname" %}
+                    <a href="{% url 'hkstat-progress-topic' blocks.0.parent.id %}?order=-surname{% if date_from%}&date_from={{date_from}}{% endif %}{% if date_by%}&date_by={{date_by}}{% endif %}">
+                        Learners
+                        <span class="glyphicon glyphicon-triangle-bottom" 
+                {% else %}
+                    <a href="{% url 'hkstat-progress-topic' blocks.0.parent.id %}?order=surname{% if date_from%}&date_from={{date_from}}{% endif %}{% if date_by%}&date_by={{date_by}}{% endif %}">
+                        Learners
+                        <span class="glyphicon glyphicon-triangle-top" 
+                {% endif %}
+                aria-hidden="true" ></span>
+            </a></b>
+        </td>
         {% for block in blocks %}
             <td colspan="2" align="center"><b style="color: #167249">
                 {{ block }}
             </b> </td>
         {% endfor %}
     </tr>
+    <tr></tr>
+    {% if block_type == 'Academy' %}
+        <tr>
+        <td></td>
+        {% for block in blocks %}
+            <td align="right"><span class="glyphicon glyphicon-education" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
+            <td align="left"><img src="{% static "/media/game.png" %}"  alt="Game"></td>
+        {% endfor %}
+        </tr>
+    {% endif %}
     {% for learner, result in all_results %}
     <tr>
         <td  align="left">

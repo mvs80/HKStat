@@ -34,43 +34,108 @@
 {% endif %}
 
 {% csrf_token %}
-<!-- <table class="form_table"> -->
+
+<form class="form-inline" action="." method="GET">
+    <div class="form-group">
+        <label for="id_date_from" style="color:#167249">DateFrom</label>
+        <input type="date" class="form-control" name="date_from" id="date_from" 
+        {% if form.date_from %} value= {{form.date_from.value}} {% endif %}>
+    </div>&nbsp;
+    <div class="form-group">
+        <label for="date_by" style="color:#167249">DateBy</label>
+        <input type="date" class="form-control" id="date_by" name="date_by" 
+        {% if form.date_by %}value={{form.date_by.value}} {% endif %}>
+    </div>
+    <input type="submit"  class='btn btn-warning' value="Filter">
+</form>
+<br>
 <table class="table table-striped table-condensed">
     <tr>
+        <td  width="10%">
+            <b>
+                {% if order == "surname" %}
+                    <a href="{% url 'hkstat-progress' %}?order=-surname{% if form.date_from.value %}&date_from={{form.date_from.value}}{% endif %}{% if form.date_by.value %}&date_by={{form.date_by.value}}{% endif %}">
+                {% else %}
+                    <a href="{% url 'hkstat-progress' %}?order=surname{% if form.date_from.value %}&date_from={{form.date_from.value}}{% endif %}{% if form.date_by.value %}&date_by={{form.date_by.value}}{% endif %}">
+                {% endif %}
+                    Surname
+                <span 
+                {% if order == "-surname" %}
+                    class="glyphicon glyphicon-triangle-top"
+                {% else %}
+                    class="glyphicon glyphicon-triangle-bottom" 
+                {% endif %}
+                aria-hidden="true" ></span>
+            </a></b>
+        </td>
+
         {% for header in headers %}
-            <td width="25%"
-            {% if forloop.counter0 > 0 %}
-                align="center" 
+            <td  style="color:#167249"
+            {% if forloop.counter0 > 1  %}
+                align="center"
+                width="14%"
+            {% else %}
+                width="10%"
             {% endif %}
-            {% if forloop.counter0 == 2 %}
+            {% if header == "Overall Progress" %}
                 colspan="3" >
                 <b>
-                    <a href="{% url 'hkstat-progress-block'%}">
-                        {{ header }}+<br>
+                    {% if all_results %}
+                    <a href="{% url 'hkstat-progress-block'%}{% if form.date_from.value %}?date_from={{form.date_from.value}}{%endif%}{%if form.date_from.value and form.date_by.value %}&date_by={{form.date_by.value}}{% elif form.date_by.value %}?date_by={{form.date_by.value}}%}{% endif %}">
+                        {{ header }} <span class="glyphicon glyphicon-collapse-down"></span>
+                    </a>
+                    {% else %}
+                        {{ header }}
+                    {% endif %}
+                </b>
+            {% elif header == "Excel Excercise" %}
+                colspan="2" >
+                <b style="color: #167249">{{ header }}<br></b>
+            {% elif header == "Start Date" %}
+                >
+                <b>
+                    {% if order == "date_reg" %}
+                        <a href="{% url 'hkstat-progress' %}?order=-date_reg{% if form.date_from.value %}&date_from={{form.date_from.value}}{% endif %}{% if form.date_by.value %}&date_by={{form.date_by.value}}{% endif %}">
+                    {% else %}
+                        <a href="{% url 'hkstat-progress' %}?order=date_reg{% if form.date_from.value%}&date_from={{form.date_from.value}}{% endif %}{% if form.date_by.value %}&date_by={{form.date_by.value}}{% endif %}">
+                    {% endif %}
+                        {{ header}}
+                    <span 
+                    {% if order == "-date_reg" %}
+                        class="glyphicon glyphicon-triangle-top"
+                    {% else %}
+                        class="glyphicon glyphicon-triangle-bottom" 
+                    {% endif %}
+                    aria-hidden="true"></span>
                 </a></b>
             {% else %}
                 >
-                    <b style="color: #167249">{{ header }}<br></b>
+                <b style="color: #167249">{{ header }}<br></b>
             {% endif %}
             </td>
         {% endfor %}
     </tr>
     <tr></tr>
     <tr>
-        <td></td><td></td>
+        <td></td><td></td><td></td><td></td>
         <td align="right"><span class="glyphicon glyphicon-education" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
-        <td align="center"><span class="glyphicon glyphicon-gift" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
+        <td align="center"><img src="{% static "/media/game.png" %}"  alt="Game"></td>
         <td align="left"><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
         <td></td>
+        <td align="right"><img src="{% static "/media/game.png" %}"  alt="Game">&nbsp;&nbsp;</td>
+        <td align="left">&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #167249"></span> </td>
+        
+
     </tr>
     {% for learner, result in all_results %}
     <tr>
         <td align="left">
-            {{learner.surname}}&nbsp;{{learner.name}}&nbsp;
-            <small>{{ learner.email }}</small>
+            {{learner.surname}}
         </td>
+        <td> {{learner.name}} </td>
+        <td>{{ learner.email }}</td>
         <td align="center">
-            {{learner.date_reg|date:"d.m.Y"}}
+            {{learner.date_reg|date:"m/d/Y"}}
         </td>
         <td align="right" style="color: #167249" title="Academy">
             {{result.academy|floatformat:2}}%
@@ -78,18 +143,16 @@
         <td align="center" style="color: #eb6f1f" title="Game">
             {{result.game|floatformat:2}}%
         </td>
-        <td align="left" style="color: #443c36" title="Mix Game">
-            {{result.mixgame|floatformat:2}}%
+        <td align="left" style="color: #443c36" title="Time">
+            {{result.time|floatformat:2}}
         </td>
         <td>
             <div class="progress">
                     <div 
-                    {% if result.all_percent >= 60 %}
+                    {% if result.all_percent >= 50 %}
                         class="progress-bar progress-bar-success" 
-                    {% elif  result.all_percent > 20 %}
-                        class="progress-bar progress-bar-warning"
                     {% else %}
-                        class="progress-bar progress-bar-danger"
+                        class="progress-bar progress-bar-warning"
                     {% endif %}
                     role="progressbar" 
                         aria-valuenow={{result.all_percent}}
@@ -100,12 +163,22 @@
                     </div>
                 </div>
         </td>
+        <td align="right" style="color: #eb6f1f" title="Percent">
+            {{result.ex_game|floatformat:2}}%
+        </td>
+        <td align="left" style="color: #443c36" title="Time">
+            {{result.ex_time|floatformat:2}}
+        </td>
     </tr>
     {% endfor %}
 </table>
 <br>
-<div class="col-md-offset-5 col-md-1">
-        <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
+<div class="col-md-offset-5 col-md-2">
+        <a href="{% url 'hkstat-progress-report' %}{% if form.date_from.value %}?date_from={{form.date_from.value}}{% endif %}{% if form.date_from.value and form.date_by.value %}&date_by={{form.date_by.value}}{% elif form.date_by.value %}?date_by={{form.date_by.value}}{% endif %}" 
+            class="btn btn-warning btn-block">
+            Export to Excel
+        </a>
+        <!-- <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' /> -->
 </div>
 
 {% endblock %}

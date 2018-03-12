@@ -3,15 +3,20 @@
 
 {% block breadcrumbs %}
     <li><a href="{% url 'HotKeyStat-index' %}">Home</a> </li>
-    <li><a href="{% url 'hkstat-progress' %}">Learner Progress(main)</a> </li>
+    <li><a href="{% url 'hkstat-progress' %}{% if date_from %}?date_from={{date_from}}{% endif %}{% if date_by and date_from %}&date_by={{date_by}}{% elif date_by %}?date_by={{date_by}}{% endif %}">
+        Learner Progress(main)</a> </li>
     <li class='active'>Learner Progress(detail)</li>
 {% endblock %}
 
 {% block page_header %}
     <h2 align="center">
         <span class="glyphicon glyphicon-education" aria-hidden="true"></span> &nbsp;
-        Learner Progress <br>
-        <small> detail </small>
+        Learner Progress <small> (detail) 
+        {% if date_from or date_by %}    
+            <br>
+            <a style="color:#eb6f1f"> {{ date_from_s|default_if_none:"nothing"}} -  {{date_by_s|default_if_none:"nothing"}}  </a>
+        {% endif %}
+        </small>
     </h2>
 {% endblock %}
 
@@ -35,14 +40,26 @@
 {% endif %}
 
 {% csrf_token %}
-<!-- <table class="form_table"> -->
 <table class="table table-striped table-condensed">
     <tr>
-        <td style="color:#167249"> <b>Learners <b></td>
+        <td>
+            <b>
+                {% if order == "surname" %}
+                    <a href="{% url 'hkstat-progress-block' %}?order=-surname{% if date_from%}&date_from={{date_from}}{% endif %}{% if date_by%}&date_by={{date_by}}{% endif %}">
+                        Learners
+                    <span class="glyphicon glyphicon-triangle-bottom" 
+                {% else %}
+                    <a href="{% url 'hkstat-progress-block' %}?order=surname{% if date_from%}&date_from={{date_from}}{% endif %}{% if date_by%}&date_by={{date_by}}{% endif %}">
+                        Learners
+                    <span class="glyphicon glyphicon-triangle-top" 
+                {% endif %}
+                aria-hidden="true" ></span>
+            </a></b>
+        </td>
         {% for header in headers %}
             <td align="center" colspan="3" >
-                <b><a href="{% url 'hkstat-progress-topic' header.id %}">
-                    {{ header }}
+                <b><a href="{% url 'hkstat-progress-topic' header.id %}{% if date_from%}?date_from={{date_from}}{% endif %}{% if date_by and date_from %}&date_by={{date_by}}{% elif date_by%}?date_by={{date_by}}{% endif %}">
+                    {{ header }} <span class="glyphicon glyphicon-collapse-down"></span>
                 </a></b>
             </td>
         {% endfor %}
@@ -53,12 +70,12 @@
         {% for header in headers %}
             {% if forloop.counter0 > 0 %}
                 <td align="right"><span class="glyphicon glyphicon-education" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
-                <td align="center"><span class="glyphicon glyphicon-gift" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
+                <td align="center"><img src="{% static "/media/game.png" %}"  alt="Game"></td>
                 <td align="left"><span class="glyphicon glyphicon-time" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
             {% endif %}
         {% endfor %}
         <td></td>
-        <td align="center"><span class="glyphicon glyphicon-gift" aria-hidden="true" style="color: #167249"></span> &nbsp;</td>
+        <td align="center"><img src="{% static "/media/game.png" %}"  alt="Game"> &nbsp;</td>
         <td></td>
     </tr>
     {% for result in all_results %}
