@@ -41,6 +41,22 @@ a:hover{
     background-color: #eb6f1f;
     color: #ffffff
 }
+.btn-warning {
+    background-color: #eb6f1f;
+    color: #ffffff
+}
+.btn-warning:hover {
+    background-color: #167249;
+    color: #ffffff
+}
+.progress-bar-warning {
+    background-image: none;
+    background-color: #eb6f1f
+}
+.progress-bar-success {
+    background-image: none;
+    background-color: #167249
+}
 table.form_table {
     margin: 0 auto;
     min-width: 600px;
@@ -83,4 +99,10 @@ table.menu_table td {
 footer {
     margin-top: 12em;
     font-size: smaller;
+}
+glyphicon {
+    color: #167249
+}
+glyphicon:hover {
+    color: #eb6f1f
 }
