@@ -136,6 +136,19 @@ class Learner(models.Model):
             return learner_res.key_count
         
         return 0
+    
+    def get_learner_avgtime(self, type_res):
+        u'''
+        Возвращает среднее время ученика по игре'''        
+        learner_res = Result.objects.filter(
+                learner=self,
+                type_result=type_res
+            ).aggregate(time=Avg('time_result'))
+
+        if learner_res['time']:
+            return learner_res['time']
+        
+        return 0
 
 
 class Block(models.Model):
@@ -183,7 +196,7 @@ class Block(models.Model):
         Возвращает список родительских блоков.
         '''
         # Находим блоки с пустым полем parent
-        return cls.objects.filter(parent__isnull=True)
+        return cls.objects.filter(parent__isnull=True).exclude(number_block='600')
 
     def get_topic(self):
         u'''

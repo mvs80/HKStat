@@ -1,22 +1,120 @@
 # -*- coding: utf-8 -*-
 
+import base64
+from copy import deepcopy
+from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.db.models import Max, Count, Sum, Avg
 
+# import xlrd
+import xlwt
+# from xlutils.copy import copy
+
 from HotKeyStat.models import (
     Learner, Block, TypeResults, Result, Organizations, Manager
     )
+from .forms import LearnerFilterForm
 
 # Create your views here.
+
+# стили форматирования для вывода в отчет
+
+style_none = xlwt.easyxf('''font: name Calibri, height 200, color_index black;
+    border: left 0, right 0, top 0, bottom 0;
+    alignment: horz CENTER, vert CENTER;
+    align: wrap 1
+''')
+style_right = deepcopy(style_none)
+style_right.borders.right = 1
+style_right_left_text = deepcopy(style_right)
+style_right_left_text.alignment.horz = 1
+style_left = deepcopy(style_none)
+style_left.borders.left = 1
+
+# нижняя граница текст жирно
+style_bold_bottom_gray = xlwt.easyxf('''font: name Calibri, height 200, color_index black, bold on;
+    border: left 0, right 0, top 0, bottom 1;
+    alignment: horz CENTER, vert CENTER;
+    pattern: pattern 1, pattern_fore_colour 67;
+    align: wrap 1;
+''')
+style_bold_bottom_green = deepcopy(style_bold_bottom_gray)
+style_bold_bottom_green.pattern.pattern_fore_colour = 42
+style_bold_bottom_pink = deepcopy(style_bold_bottom_gray)
+style_bold_bottom_pink.pattern.pattern_fore_colour = 26
+style_bottom_gray = deepcopy(style_bold_bottom_gray)
+style_bottom_gray.font.bold = 0
+style_bottom_gray.alignment.horz = 1
+style_bottom_gray.alignment.wrap = 0
+style_bottom_right_gray = deepcopy(style_bottom_gray)
+style_bottom_right_gray.borders.right = 1
+
+# правая и нижняя граница текст жирно
+style_bold_bottom_right_pink = deepcopy(style_bold_bottom_gray)
+style_bold_bottom_right_pink.borders.right = 1
+style_bold_bottom_right_pink.pattern.pattern_fore_colour = 26
+style_bold_bottom_right_green = deepcopy(style_bold_bottom_gray)
+style_bold_bottom_right_green.borders.right = 1
+style_bold_bottom_right_green.pattern.pattern_fore_colour = 42
+
+# левая и нижняя граница текст жирно
+style_bold_bottom_left_pink = deepcopy(style_bold_bottom_gray)
+style_bold_bottom_left_pink.borders.left = 1
+style_bold_bottom_left_pink.pattern.pattern_fore_colour = 26
+style_bold_bottom_left_green = deepcopy(style_bold_bottom_gray)
+style_bold_bottom_left_green.borders.left = 1
+style_bold_bottom_left_green.pattern.pattern_fore_colour = 42
+
+# Левая, правая и нижняя граница - текст жирно
+style_bold_left_right_pink = deepcopy(style_bold_bottom_left_pink)
+style_bold_left_right_pink.borders.right = 1
+style_bold_left_right_green = deepcopy(style_bold_bottom_left_green)
+style_bold_left_right_green.borders.left = 1
+
+# Нижняя граница, нежирный текст
+style_bottom_green = deepcopy(style_bold_bottom_green)
+style_bottom_green.font.bold = 0
+style_bottom_pink = deepcopy(style_bold_bottom_pink)
+style_bottom_pink.font.bold = 0
+
+# Нижняя и правая граница, нежирный текст
+style_bottom_right_green = deepcopy(style_bold_bottom_green)
+style_bottom_right_green.borders.right = 1
+style_bottom_right_green.font.bold = 0
+style_bottom_right_pink = deepcopy(style_bold_bottom_pink)
+style_bottom_right_pink.borders.right = 1
+style_bottom_right_pink.font.bold = 0
+
+# Нижняя и левая граница, нежирный текст
+style_bottom_left_green = deepcopy(style_bold_bottom_green)
+style_bottom_left_green.borders.left = 1
+style_bottom_left_green.font.bold = 0
+style_bottom_left_pink = deepcopy(style_bold_bottom_pink)
+style_bottom_left_pink.borders.left = 1
+style_bottom_left_pink.font.bold = 0
+
+# Нижняя, правая и левая граница, нежирный текст
+style_left_right_green = deepcopy(style_bold_left_right_green)
+style_left_right_green.font.bold = 0
+style_left_right_pink = deepcopy(style_bold_left_right_pink)
+style_left_right_pink.font.bold = 0
+
+
+def base64_url_decode(inp):
+    padding_factor = (4 - len(inp) % 4) % 4
+    inp += "="*padding_factor 
+    # s = base64.b64decode(b64_string)
+    return base64.b64decode(inp.translate(dict(zip(map(ord, u'-_'), u'+/'))))
 
 def index(request):
     u'''
     Страница выбора типа отчета
     '''
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('login')
 
     user = request.user
@@ -39,9 +137,26 @@ def progress(request):
     # Проверяем права доступа текущего менеджера.
     if manager is None:
         return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
-
+    
     # Списки учеников, результаты которых доступны текущему проверяющему:
     learners = manager.get_learner_list()
+    form = LearnerFilterForm(request.GET)
+    if form.is_valid():
+        if form.cleaned_data["date_from"]:
+            learners = learners.filter(date_reg__gte=form.cleaned_data["date_from"])
+        if form.cleaned_data[u"date_by"]:
+            learners = learners.filter(date_reg__lte=form.cleaned_data[u"date_by"])
+
+    order = u'surname'
+    if request.GET.get('order', None) :
+        order = request.GET['order']
+    # Списки учеников, результаты которых доступны текущему проверяющему:
+    if order == u'date_reg' or order == u'-date_reg':
+        learners = learners.order_by(order, u'surname')
+    else:
+        learners = learners.order_by(order, u'date_reg')
+    
+        
     # Списки родительских блоков
     parent_blocks = Block.get_parent_block()
 
@@ -52,7 +167,7 @@ def progress(request):
     # Список редультатов всех учеников
     all_results = []
     # список заголовков таблицы
-    headers = [u'Learners', u'Start Date', u'Overall Progress', u'Graph']
+    headers = [u'Name', u'E-mail', u'Start Date', u'Overall Progress', u'Graph', u'Excel Excercise']
     # проценты ученика по академии, игре, mixGame и общий процент
     academy_percent = 0
     game_percent = 0
@@ -68,6 +183,7 @@ def progress(request):
         academy_percent = learner.get_result_type(academy_type)
         game_percent = learner.get_result_type(game_type)
         mixgame_percent = learner.get_result_type(mixgame_type)
+        time = learner.get_learner_avgtime(game_type)
         all_percent = academy_percent + game_percent + mixgame_percent
 
         # Максимальное кол-во ключей по академии равно мак кол-ву ключей по игре
@@ -80,7 +196,7 @@ def progress(request):
         if maxkey_mixgame and maxkey_mixgame > 0:
             mixgame_percent = 100.00*(mixgame_percent/maxkey_mixgame)  
         # Общий процент по академии, игре и mixgame
-        all_maxe_percent = 2* maxkey_academy + maxkey_mixgame
+        all_max_percent = 2* maxkey_academy + maxkey_mixgame
         if all_max_percent and all_max_percent > 0:
             all_percent = 100.00*(all_percent/all_max_percent)
 
@@ -88,8 +204,10 @@ def progress(request):
             {
                 "academy": academy_percent, 
                 "game": game_percent, 
-                "mixgame": mixgame_percent,
+                "time": time,
                 "all_percent": all_percent, 
+                "ex_game": 0,
+                "ex_time": 0,
             }
         )
         # learner_results.append(results)
@@ -98,6 +216,8 @@ def progress(request):
     return render(request, 'progress.html', {
         'all_results': all_results,
         'headers': headers,
+        'order': order,
+        'form': form,
     })
 
 
@@ -111,8 +231,29 @@ def progress_block(request):
     if manager is None:
         return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
 
+    date_from = None
+    date_from_s = None
+    date_by = None
+    date_by_s = None
+    order = u'surname'
+    if request.GET.get('order', None) :
+        order = request.GET['order']
+    if request.GET.get('date_from', None) :
+        date_from = request.GET['date_from']
+        date_from_s = datetime.strptime(date_from, "%Y-%m-%d").strftime("%m/%d/%Y")
+    if request.GET.get('date_by', None) :
+        date_by = request.GET['date_by']
+        date_by_s = datetime.strptime(date_by, "%Y-%m-%d").strftime("%m/%d/%Y")
+
     # Списки учеников, результаты которых доступны текущему проверяющему:
     learners = manager.get_learner_list()
+    # Применяем фильры по дате
+    if date_from:
+        learners = learners.filter(date_reg__gte=date_from)
+    if date_by:
+        learners = learners.filter(date_reg__lte=date_by)
+    learners = learners.order_by(order)
+    
     # Списки родительских блоков
     parent_blocks = Block.get_parent_block()
 
@@ -156,6 +297,11 @@ def progress_block(request):
         'blocks': parent_blocks,
         'all_results': all_results,
         'headers': headers,
+        'order': order,
+        'date_from': date_from,
+        'date_by': date_by,
+        'date_from_s': date_from_s,
+        'date_by_s': date_by_s,
     })    
 
 
@@ -169,8 +315,31 @@ def progress_topic(request, block_id):
     if manager is None:
         return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
 
+    
+    date_from = None
+    date_from_s = None
+    date_by = None
+    date_by_s = None
+    order = u'surname'
+    if request.GET.get('order', None) :
+        order = request.GET['order']
+    if request.GET.get('date_from', None) :
+        date_from = request.GET['date_from']
+        date_from_s = datetime.strptime(date_from, "%Y-%m-%d").strftime("%m/%d/%Y")
+    if request.GET.get('date_by', None) :
+        date_by = request.GET['date_by']
+        date_by_s = datetime.strptime(date_by, "%Y-%m-%d").strftime("%m/%d/%Y")
+ 
     # Списки учеников, результаты которых доступны текущему проверяющему:
     learners = manager.get_learner_list()
+    # Применяем фильры по дате
+    if date_from:
+        learners = learners.filter(date_reg__gte=date_from)
+    if date_by:
+        learners = learners.filter(date_reg__lte=date_by)
+    learners = learners.order_by(order)
+
+
     # блок, топики которого мы раскрываем
     parent_block = get_object_or_404(Block, id=block_id)
     # Списки топиков родительского блока
@@ -217,6 +386,11 @@ def progress_topic(request, block_id):
         'all_results': all_results,
         'headers': headers,
         'block_type': block_type,
+        'order': order,
+        'date_from': date_from,
+        'date_by': date_by,
+        'date_from_s': date_from_s,
+        'date_by_s': date_by_s,
     })
 
 
@@ -238,7 +412,7 @@ def module_details(request):
     game_type = TypeResults.objects.get(code=1)
     mixgame_type = TypeResults.objects.get(code=2)
 
-    headers = [u'Topics', u'Average Time Spent', u'%', u'Graph']
+    headers = [u'Topics', u'Average Time Spent', u'Overall Progress', u'Graph']
     all_results = []
 
     for block in parent_blocks:
@@ -257,6 +431,7 @@ def module_details(request):
             result_all = (result_academy + result_game)/2
         else:
             result_game = block.get_avgresult_block(manager, mixgame_type)
+            block_time = block.get_time_block(manager, mixgame_type)
             # общий процент по блоку
             result_all = result_game
 
@@ -287,8 +462,10 @@ def block_details(request, block_id):
 
     # Списки учеников, результаты которых доступны текущему проверяющему:
     learners = manager.get_learner_list()
-    # блок, топики которого мы раскрываем
+    # блок, топики которого мы раскрывaем
     parent_block = get_object_or_404(Block, id=block_id)
+    # блок mixgame
+    block_mixgame = get_object_or_404(Block, number_block = '500')
     # Списки топиков родительского блока
     topics = parent_block.get_topic()
 
@@ -297,18 +474,19 @@ def block_details(request, block_id):
     game_type = TypeResults.objects.get(code=1)
     mixgame_type = TypeResults.objects.get(code=2)
 
-    headers = [u'Topics', u'Average Time Spent', u'%', u'Graph']
+
+    headers = [u'Topics', u'Average Time Spent', u'Overall Progress', u'Graph']
     all_results = []
 
     for topic in topics:
         result_academy = 0
         result_game = 0
         result_all = 0
+        topic_time = 0
 
         topic_result = []
         topic_result.append(topic)
-        if topic.number_block != '500':
-            topic_time = 0
+        if topic != block_mixgame and topic.parent != block_mixgame:
             topic_time = topic.get_time_block(manager, game_type)
             result_academy = topic.get_avgresult_block(manager, academy_type)
             result_game = topic.get_avgresult_block(manager, game_type)
@@ -316,6 +494,7 @@ def block_details(request, block_id):
             result_all = (result_academy + result_game)/2
         else:
             result_game = topic.get_avgresult_block(manager, mixgame_type)
+            topic_time = topic.get_time_block(manager, mixgame_type)
             # общий процент по блоку
             result_all = result_game
 
@@ -328,10 +507,312 @@ def block_details(request, block_id):
 
         all_results.append(topic_result)
 
-    return render(request, 'topic_detail.html', {
+    return render(request, 'block_detail.html', {
         'all_results': all_results,
         'headers': headers, 
         'parent_block': parent_block,
     })
 
+
+def result_save(request):
+    u'''
+    Запись результатов ученика
+    '''
+    if request.GET['results'] :
+        results = request.GET['results']
+        results = base64_url_decode(results)
+        results_list = str(results).split(u';')
+        organization = None
+
+        # Первый элемент списка - данные ученика
+        learner_info = results_list[0].split(u',')
+        if learner_info:
+            org_name = learner_info[0][2:]
+            learner_name = learner_info[1]
+            learner_email = learner_info[2]
+            if learner_info[3]:
+                learner_date = datetime.date(datetime.strptime(learner_info[3], '%d.%m.%Y') )
+            # Проверяем, есть ли организация в справочнике
+            organization = get_object_or_404(Organizations, name=org_name)
+        # Проверяем есть ли в БД ученик с указанным e-mail
+        learner, _ = Learner.objects.get_or_create(
+            org=organization,
+            email=learner_email,
+        )
+        if learner:
+            learner.name=learner_name
+            learner.date_reg=learner_date
+            learner.save()
+
+        if organization and learner:
+            for i, result in enumerate(results_list):
+                if i > 0:
+                    total = 0
+                    correct = 0
+                    key_count = 0
+                    learner_res = None
+                    type_result = None
+                    date_result = datetime.now()
+                    # Если последний элемент списка - убрать кавычку в конце
+                    if i == len(results_list) - 1:
+                        result = result[0:-1]
+                    learner_res = result.split(u',')
+                    # Результаты ученика
+                    number_block = learner_res[0]
+                    try:
+                        time_result = float(learner_res[1])
+                    except:
+                        time_result = 0
+                    try:
+                        correct = int(learner_res[2])
+                    except:
+                        pass
+                    try:
+                        total = int(learner_res[3])
+                    except:
+                        pass
+                    if learner_res[4]:
+                        date_result = datetime.date(datetime.strptime(learner_res[4], '%d.%m.%Y') )
+                    try:
+                        typeresult = int(learner_res[6])
+                    except:
+                        pass
+                    # Определяем кол-во ключей 
+                    # если mixgame (кол-во верных ответов=кол-во всего ответов и кол-во всего ответов > 20)
+                    if (typeresult == 2 and
+                        (total and correct and total == correct) and 
+                        ((total >= 20 and number_block != '503') or (total >= 14 and number_block == '503'))):
+                            key_count = 5
+                    # если game (кол-во верных ответов=кол-во всего ответов)
+                    elif (typeresult == 1 and total and correct and total == correct and total > 0) :
+                        key_count = 1
+                    # академия
+                    elif typeresult == 0:
+                        key_count = 1
+                    # Определяем блок, тип результата
+                    block = Block.objects.filter(number_block=number_block).first()
+                    type_result = TypeResults.objects.filter(code=typeresult).first()
+
+                    # Записываем результаты по блоку 
+                    if block:   
+                        result, _ = Result.objects.get_or_create(
+                            learner=learner,
+                            block=block,
+                            type_result=type_result,
+                        )
+                        if result:
+                            result.date_result = date_result
+                            result.key_count = key_count
+                            result.correct = correct
+                            result.total = total
+                            result.time_result = time_result 
+
+                            result.save()
+                    # print(result, 'type_result=', type_result, 'total=', total, 'correct=', correct, key_count)
+
+    return HttpResponse(u'OK')
+
+
+def progress_report(request):
+    u"""
+    Отчетная форма для Progress(main)
+    """
+    user = request.user
+    manager = user.manager
+    # Проверяем права доступа текущего менеджера.
+    if manager is None:
+        return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
+
+    # Создание книги excel и страницы в ней
+    book = xlwt.Workbook()
+    sheet = book.add_sheet('Learner Progress')
+    sheet2 = book.add_sheet('Module Details')
+    #Убираем колонтитулы
+    sheet.set_header_margin(0)
+    sheet.set_footer_margin(0)
+    sheet.print_scaling=100
+    sheet.left_margin=0.41
+    # sheet.set_header_str(u"")
+    # sheet.set_footer_str(u"")
+
+    # Заполняем данными
+    # Списки учеников, результаты которых доступны текущему проверяющему:
+    learners = manager.get_learner_list()
+    
+    if request.GET.get('date_from', None) :
+        date_from = request.GET['date_from']
+        learners = learners.filter(date_reg__gte=date_from)
+    if request.GET.get('date_by', None) :
+        date_by = request.GET['date_by']
+        learners = learners.filter(date_reg__lte=date_by)
+
+    learners = learners.order_by(u'surname')
+    
+    # Списки родительских блоков
+    parent_blocks = Block.get_parent_block()
+    block_mixgame = get_object_or_404(Block, number_block = '500')
+
+    academy_type = TypeResults.objects.get(code=0)
+    game_type = TypeResults.objects.get(code=1)
+    mixgame_type = TypeResults.objects.get(code=2)
+
+    # список заголовков таблицы
+    headers = [u'First Name', u'Last Name', u'E-mail', u'Start Date', u'Excel Exercise', u'Overall Progress']
+    
+    # проценты ученика по академии, игре, mixGame и общий процент
+    academy_percent = 0
+    game_percent = 0
+    mixgame_percent = 0
+
+    # 1й лист 
+    # Выводим шапку отчета
+    for i, header in enumerate(headers):
+        if header == u'Overall Progress':
+            sheet.col(i).width = 3000
+            sheet.col(i + 1).width = 3000
+            sheet.col(i + 2).width = 3400
+            sheet.write_merge(0, 0, i + 1, i + 3, header, style_bold_left_right_green)
+            sheet.write(1, i + 1, u'Academy,%', style_bold_bottom_left_green)
+            sheet.write(1, i + 2, u'Game,%', style_bold_bottom_green)
+            sheet.write(1, i + 3, u'Time Spent', style_bold_bottom_right_green)
+        elif header == u'Excel Exercise':
+            sheet.col(i).width = 2500
+            sheet.col(i + 1).width = 3000
+            sheet.write_merge(0, 0, i, i + 1, header, style_bold_left_right_pink)
+            sheet.write(1, i, u'Time', style_bold_bottom_left_pink)
+            sheet.write(1, i + 1, u'Accuracy, %', style_bold_bottom_right_pink)
+        else:
+            sheet.col(i).width = 4000
+            sheet.write_merge(0, 1, i, i, header, style_bold_bottom_gray)
+    
+    # Выводим данные
+    n = 2
+    for i, learner in enumerate(learners):
+        # список результатов каждого ученика
+        sheet.write(n, 0, learner.name, style_right)
+        sheet.write(n, 1, learner.surname, style_right)
+        sheet.write(n, 2, learner.email, style_right)
+        sheet.write(n, 3, learner.date_reg.strftime("%d.%m.%Y"), style_right)
+
+        academy_percent = learner.get_result_type(academy_type)
+        sheet.write(n, 6, '%.2f' % academy_percent + r'%', style_left)
+
+        game_percent = learner.get_result_type(game_type)
+        sheet.write(n, 7, '%.2f' % game_percent + r'%', style_none)
+
+        time = learner.get_learner_avgtime(game_type)
+        sheet.write(n, 8, '%.2f' % time, style_right)
+
+        # номер столбца, с которого начинаются результаты по этапам
+        k = 9
+        for j, block in enumerate(parent_blocks):
+            # k += j
+            if i == 0:
+                sheet.col(k).width = 3000
+                if block.number_block != '500':
+                    sheet.col(k + 1).width = 3000
+                    sheet.col(k + 2).width = 3000
+                    if j%2 > 0:
+                        sheet.write_merge(0, 0, k, k + 2, '%s.%s' %(block.num, block.name), style_left_right_green)
+                        sheet.write(1, k, u'Academy,%', style_bottom_left_green)
+                        sheet.write(1, k + 1, u'Game,%', style_bottom_green)
+                        sheet.write(1, k + 2 , u'Time Spent', style_bottom_right_green)
+                    else:
+                        sheet.write_merge(0, 0, k, k + 2, '%s.%s' %(block.num, block.name), style_left_right_pink)
+                        sheet.write(1, k, u'Academy,%', style_bottom_left_pink)
+                        sheet.write(1, k + 1, u'Game,%', style_bottom_pink)
+                        sheet.write(1, k + 2 , u'Time Spent', style_bottom_right_pink)
+                else:
+                    sheet.write(0, k, '%s.%s' %(block.num, block.name), style_left_right_pink)
+                    sheet.write(1, k, u'%', style_bottom_right_pink)
+            # Игра или академия
+            if block.number_block != '500':
+                academy_percent = block.get_percent_block(learner, academy_type)
+                sheet.write(n, k, '%.2f' % academy_percent + r'%', style_left)
+                game_percent = block.get_percent_block(learner, game_type)
+                sheet.write(n, k +1 , '%.2f' % game_percent + r'%', style_none)
+                time = block.get_avgtime_block(learner, game_type)
+                sheet.write(n, k + 2, '%.2f' % time + r'%', style_right)
+                k += 3
+            # MixGame
+            else:
+                game_percent = block.get_percent_block(learner, mixgame_type)
+                sheet.write(n, k, '%.2f' % game_percent + r'%', style_right) 
+                k += 2
+        n += 1    
+
+    # 2й лист    
+    headers = [u'Topics', u'Academy, %', u'Game, %', u'Time Spent']
+    
+    for i, header in enumerate(headers):
+        if i == 0 :
+            sheet2.col(i).width = 4000
+            sheet2.col(i + 1).width = 9000
+            sheet2.write_merge(0,0,0,1, header, style_bold_bottom_right_pink)
+        elif i == 3:
+            sheet2.col(i + 1).width = 3000
+            sheet2.write(0, i + 1 , header, style_bold_bottom_right_pink)
+            sheet2.write(1, i + 1 , "", style_bottom_right_gray)
+        else:
+            sheet2.col(i + 1).width = 3000
+            sheet2.write(0, i + 1 , header, style_bold_bottom_right_pink)
+            sheet2.write(1, i + 1 , "", style_bottom_gray)
+    
+    sheet2.write_merge(1, 1, 0, 1, 'Overall Progress', style_bottom_gray)
+    nstr = 2
+    for j, block in enumerate(parent_blocks):
+        sheet2.write_merge(nstr, nstr, 0, 1, '%s.%s' %(block.num, block.name), style_right_left_text)
+        result_academy = 0
+        result_game = 0
+
+        if block.number_block != '500':
+            block_time = 0
+            result_academy = block.get_avgresult_block(manager, academy_type)
+            sheet2.write(nstr, 2, '%.2f' %result_academy + r'%', style_none)
+            result_game = block.get_avgresult_block(manager, game_type)
+            sheet2.write(nstr, 3, '%.2f' %result_game + r'%', style_none)
+            block_time = block.get_time_block(manager, game_type)
+            sheet2.write(nstr, 4, '%.2f' %block_time, style_right)
+        else:
+            
+            sheet2.write(nstr, 2, '-' , style_none)
+            result_game = block.get_avgresult_block(manager, mixgame_type)
+            sheet2.write(nstr, 3, '%.2f' %result_game + r'%', style_none)
+            # block_time = block.get_time_block(manager, mixgame_type)
+            sheet2.write(nstr, 4, '-', style_right)
+
+        # Дочерние топики
+        topics = block.get_topic()
+        for k, topic in enumerate(topics, start=1):
+            sheet2.write(nstr + k, 1, '%s.%s' %(topic.num, topic.name), style_right_left_text)
+            result_academy = 0
+            result_game = 0
+            topic_time = 0
+
+            if topic != block_mixgame and topic.parent != block_mixgame:
+                result_academy = topic.get_avgresult_block(manager, academy_type)
+                sheet2.write(nstr + k, 2, '%.2f' %result_academy + r'%', style_none)
+                result_game = topic.get_avgresult_block(manager, game_type)
+                sheet2.write(nstr + k, 3, '%.2f' %result_game + r'%', style_none)
+                topic_time = topic.get_time_block(manager, game_type)
+                sheet2.write(nstr + k, 4, '%.2f' %topic_time, style_right)
+            else:
+                sheet2.write(nstr + k, 2, '-' , style_none)
+                result_game = topic.get_avgresult_block(manager, mixgame_type)
+                sheet2.write(nstr + k, 3, '%.2f' %result_game + r'%', style_none)
+                # topic_time = topic.get_time_block(manager, mixgame_type)
+                sheet2.write(nstr + k, 4, '-', style_right)
+        sheet2.write_merge(nstr + k + 1, nstr + k + 1, 0, 1, '', style_right)
+        sheet2.write(nstr + k + 1, 4, '', style_right)
+        nstr += k + 2
+
+
+    response = HttpResponse(content_type='application/ms-excel')
+    dt = datetime.now().strftime("%y%m%d %H:%M")
+    file_name = dt + '_progress_main'
+    file_name += '.xls'
+    response['Content-Disposition'] = 'attachment; filename=' + file_name
+    book.save(response)
+
+    return response
 
