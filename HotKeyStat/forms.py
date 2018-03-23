@@ -19,5 +19,5 @@ class LearnerFilterForm(forms.Form):
         widget=forms.DateInput(),
         required=False,
     )
-    date_by = forms.DateField(label=u'Date By', required=False)
+    date_by = forms.DateField(label=u'Date To', required=False)
     

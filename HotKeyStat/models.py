@@ -35,6 +35,7 @@ class Organizations(models.Model):
         verbose_name_plural = u'Organizations'
         unique_together = ('name',)
         ordering = ('name',)
+        permissions = (('view_statistic', u'Hot Key Statistics'),)
 
     def __str__(self):
         if self.org_parent:
@@ -42,6 +43,12 @@ class Organizations(models.Model):
             return u'%s - %s' %(self.name, parent_org)
         else:
             return self.name
+
+    def get_learner_org(self):
+        u'''
+        Возвращает список учеников из организации
+        '''
+        return Learner.objects.filter(org=self)
 
 
 class Manager(models.Model):
@@ -61,6 +68,7 @@ class Manager(models.Model):
     class Meta:
         verbose_name = u'Manager'
         verbose_name_plural = u'Managers'
+        permissions = (('view_statistic', u'Hot Key Statistics'),)
 
     def __str__(self):
         user = self.get_user_obj()
@@ -100,12 +108,14 @@ class Learner(models.Model):
     name = models.CharField(u'Name', max_length=100, null=False, blank=False)
     email = models.CharField(u'E-mail', max_length=50, null=False, blank=False)
     date_reg = models.DateField(u'Date registartion', auto_now_add=True, null=True)
+    rank = models.PositiveIntegerField(u'Rank of the learner', null=True, default = 100000)
 
     class Meta:
         verbose_name = u'Learner'
         verbose_name_plural = u'Learners'
         unique_together = (u'surname', u'name', u'email', u'org')
         ordering = (u'org', u'surname', u'name')
+        permissions = (('view_statistic', u'Hot Key Statistics'),)
 
     def __str__(self):
         return u'%s %s(%s) - %s' %(self.surname, self.name, self.email, self.org.name)
@@ -137,6 +147,37 @@ class Learner(models.Model):
         
         return 0
     
+    def get_result_excercise(self ):
+        u'''
+        Возвращает результат ученика по упражнению (Excel Excercise)
+        '''        
+        block_excercise = Block.objects.filter(number_block='600').first()
+        if block_excercise:
+            learner_res = Result.objects.filter(
+                learner=self,
+                block=block_excercise
+            ).first()
+            if learner_res and learner_res.correct and learner_res.total and learner_res.total > 0 :
+                return 100.00*(learner_res.correct/learner_res.total)
+        
+        return 0
+
+    def get_time_excercise(self):
+        u'''
+        Возвращает время ученика по упражнению (Excel Excercise)
+        '''        
+        block_excercise = Block.objects.filter(number_block='600').first()
+        if block_excercise:
+            learner_res = Result.objects.filter(
+                learner=self,
+                block=block_excercise
+            ).first()
+            if learner_res:
+                return learner_res.time_result
+        
+        return 0
+
+    
     def get_learner_avgtime(self, type_res):
         u'''
         Возвращает среднее время ученика по игре'''        
@@ -147,6 +188,19 @@ class Learner(models.Model):
 
         if learner_res['time']:
             return learner_res['time']
+        
+        return 0
+
+    def get_key_count(self):
+        u'''
+        Возвращает среднее время ученика по игре'''        
+        learner_res = Result.objects.filter(
+                learner=self,
+                block__in=Block.get_parent_block()
+            ).aggregate(key_count=Sum('key_count'))
+
+        if learner_res['key_count']:
+            return learner_res['key_count']
         
         return 0
 
@@ -170,6 +224,7 @@ class Block(models.Model):
         verbose_name = u'Block'
         verbose_name_plural = u'Blocks'
         ordering = (u'num', u'name')
+        permissions = (('view_statistic', u'Hot Key Statistics'),)
 
     def __str__(self):
         return u'%s. %s' %(self.num, self.name)
@@ -326,6 +381,7 @@ class TypeResults(models.Model):
         verbose_name = u'TypeResults'
         verbose_name_plural = u'TypeResults'
         ordering = (u'name', )
+        permissions = (('view_statistic', u'Hot Key Statistics'),)
 
     def __str__(self):
         return self.name
@@ -349,6 +405,7 @@ class Result(models.Model):
         verbose_name_plural = u'LearnerResults'
         unique_together = (u'learner', u'block', u'type_result')
         ordering = (u'block', u'learner')
+        permissions = (('view_statistic', u'Hot Key Statistics'),)
 
     def __str__(self):
         return u'%s - %s (%s)' %(self.learner, date_format(self.date_result), self.type_result)

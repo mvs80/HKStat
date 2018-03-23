@@ -10,4 +10,5 @@ urlpatterns = [
     url(r"^ModuleDetails/block/(?P<block_id>\d+)/$", views.block_details, name='hkstat-block-details'),
     url(r"^result/$", views.result_save, name='result-save'),
     url(r'^ProgressOverview/report/$', views.progress_report, name='hkstat-progress-report'),
+    url(r'^Champions/$', views.champions, name='hkstat-champions'),
 ]

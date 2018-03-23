@@ -4,6 +4,7 @@ import base64
 from copy import deepcopy
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseForbidden
@@ -12,6 +13,7 @@ from django.db.models import Max, Count, Sum, Avg
 
 # import xlrd
 import xlwt
+import math
 # from xlutils.copy import copy
 
 from HotKeyStat.models import (
@@ -110,6 +112,23 @@ def base64_url_decode(inp):
     # s = base64.b64decode(b64_string)
     return base64.b64decode(inp.translate(dict(zip(map(ord, u'-_'), u'+/'))))
 
+
+def get_time_str(excercise_time):
+    u"""
+    Возвращает время ученика в формате "Nmin Ms"
+    """
+    excercise_time_str = "0"
+    if excercise_time > 60:
+        excercise_time_sec = excercise_time%60
+        excercise_time_min = excercise_time/60
+        excercise_time_str = str(int(excercise_time_min)) + "min " + str(int(excercise_time_sec)) + "sес"
+    elif excercise_time > 0:
+        excercise_time_str = str(int(excercise_time)) + "s"
+    
+    return excercise_time_str
+
+
+# @permission_required('HotKeyStat.view_statistic')
 def index(request):
     u'''
     Страница выбора типа отчета
@@ -128,6 +147,8 @@ def index(request):
     })
 
 
+
+# @permission_required('HotKeyStat.view_statistic')
 def progress(request):
     u'''
     отчет Прогресс
@@ -158,7 +179,7 @@ def progress(request):
     
         
     # Списки родительских блоков
-    parent_blocks = Block.get_parent_block()
+    # parent_blocks = Block.get_parent_block()
 
     academy_type = TypeResults.objects.get(code=0)
     game_type = TypeResults.objects.get(code=1)
@@ -183,7 +204,7 @@ def progress(request):
         academy_percent = learner.get_result_type(academy_type)
         game_percent = learner.get_result_type(game_type)
         mixgame_percent = learner.get_result_type(mixgame_type)
-        time = learner.get_learner_avgtime(game_type)
+        time = get_time_str(learner.get_learner_avgtime(game_type))
         all_percent = academy_percent + game_percent + mixgame_percent
 
         # Максимальное кол-во ключей по академии равно мак кол-ву ключей по игре
@@ -200,14 +221,20 @@ def progress(request):
         if all_max_percent and all_max_percent > 0:
             all_percent = 100.00*(all_percent/all_max_percent)
 
+        # Excel Excercise
+        excercise_percent = learner.get_result_excercise()
+        excercise_time = get_time_str(learner.get_time_excercise())
+        # excercise_time = learner.get_time_excercise()
+
+
         learner_results.append( 
             {
                 "academy": academy_percent, 
                 "game": game_percent, 
                 "time": time,
                 "all_percent": all_percent, 
-                "ex_game": 0,
-                "ex_time": 0,
+                "excercise_percent": excercise_percent,
+                "excercise_time": excercise_time,
             }
         )
         # learner_results.append(results)
@@ -221,6 +248,7 @@ def progress(request):
     })
 
 
+# @permission_required('HotKeyStat.view_statistic')
 def progress_block(request):
     u'''
     отчет Прогресс по блокам
@@ -279,7 +307,7 @@ def progress_block(request):
             if block.number_block != '500':
                 academy_percent = block.get_percent_block(learner, academy_type)
                 game_percent = block.get_percent_block(learner, game_type)
-                time = block.get_avgtime_block(learner, game_type)
+                time = get_time_str(block.get_avgtime_block(learner, game_type))
                 results.append( 
                     {"academy": academy_percent, "game": game_percent, "time": time}
                 )
@@ -305,6 +333,7 @@ def progress_block(request):
     })    
 
 
+# @permission_required('HotKeyStat.view_statistic')
 def progress_topic(request, block_id):
     u'''
     отчет Прогресс внутри блока (по топикам)
@@ -394,6 +423,7 @@ def progress_topic(request, block_id):
     })
 
 
+# @permission_required('HotKeyStat.view_statistic')
 def module_details(request):
     u'''
     отчет Сводный по блокам 
@@ -424,14 +454,14 @@ def module_details(request):
         block_result.append(block)
         if block.number_block != '500':
             block_time = 0
-            block_time = block.get_time_block(manager, game_type)
+            block_time = get_time_str(block.get_time_block(manager, game_type))
             result_academy = block.get_avgresult_block(manager, academy_type)
             result_game = block.get_avgresult_block(manager, game_type)
             # общий процент по блоку
             result_all = (result_academy + result_game)/2
         else:
             result_game = block.get_avgresult_block(manager, mixgame_type)
-            block_time = block.get_time_block(manager, mixgame_type)
+            block_time = get_time_str(block.get_time_block(manager, mixgame_type))
             # общий процент по блоку
             result_all = result_game
 
@@ -450,6 +480,7 @@ def module_details(request):
     })
 
 
+# @permission_required('HotKeyStat.view_statistic')
 def block_details(request, block_id):
     u'''
     отчет Сводный по topics
@@ -487,14 +518,14 @@ def block_details(request, block_id):
         topic_result = []
         topic_result.append(topic)
         if topic != block_mixgame and topic.parent != block_mixgame:
-            topic_time = topic.get_time_block(manager, game_type)
+            topic_time = get_time_str(topic.get_time_block(manager, game_type))
             result_academy = topic.get_avgresult_block(manager, academy_type)
             result_game = topic.get_avgresult_block(manager, game_type)
             # общий процент по блоку
             result_all = (result_academy + result_game)/2
         else:
             result_game = topic.get_avgresult_block(manager, mixgame_type)
-            topic_time = topic.get_time_block(manager, mixgame_type)
+            topic_time = get_time_str(topic.get_time_block(manager, mixgame_type))
             # общий процент по блоку
             result_all = result_game
 
@@ -534,6 +565,8 @@ def result_save(request):
                 learner_date = datetime.date(datetime.strptime(learner_info[3], '%d.%m.%Y') )
             # Проверяем, есть ли организация в справочнике
             organization = get_object_or_404(Organizations, name=org_name)
+            # Вычисляем блок - упраженение excel excercise
+            block_excercise = get_object_or_404(Block, number_block='600')
         # Проверяем есть ли в БД ученик с указанным e-mail
         learner, _ = Learner.objects.get_or_create(
             org=organization,
@@ -546,7 +579,7 @@ def result_save(request):
 
         if organization and learner:
             for i, result in enumerate(results_list):
-                if i > 0:
+                if i > 0 and len(result) > 1:
                     total = 0
                     correct = 0
                     key_count = 0
@@ -557,6 +590,7 @@ def result_save(request):
                     if i == len(results_list) - 1:
                         result = result[0:-1]
                     learner_res = result.split(u',')
+                    # print("learner_res=", learner_res)
                     # Результаты ученика
                     number_block = learner_res[0]
                     try:
@@ -572,7 +606,7 @@ def result_save(request):
                     except:
                         pass
                     if learner_res[4]:
-                        date_result = datetime.date(datetime.strptime(learner_res[4], '%d.%m.%Y') )
+                         date_result = datetime.date(datetime.strptime(learner_res[4], '%d.%m.%Y') )
                     try:
                         typeresult = int(learner_res[6])
                     except:
@@ -609,10 +643,100 @@ def result_save(request):
 
                             result.save()
                     # print(result, 'type_result=', type_result, 'total=', total, 'correct=', correct, key_count)
+        
+        # пересчитываем ранги учеников
+        learners_results = Result.objects.filter(
+            learner__org=organization, 
+            block=block_excercise
+        ).order_by('-correct', 'time_result')
+        for learner_rank, learner_res in enumerate(learners_results, start=1):
+            learner_res.learner.rank = learner_rank
+            learner_res.learner.save()
 
-    return HttpResponse(u'OK')
+    return redirect('hkstat-champions', organization, learner)
 
 
+def champions(request, org=None, learner=None):
+    u'''
+    Статистика для учеников
+    '''
+    user = request.user
+    manager = user.manager
+    # Проверяем права доступа текущего менеджера или ученика.
+    if manager is None and learner is None:
+        return HttpResponseForbidden(u"You don't have enough rights. Please contact support")
+
+    # org_name = "PwC"
+    # organization = get_object_or_404(Organizations, name=org_name)
+    if org:
+        organization = org
+        state = 'manager'
+    else:
+        organization = get_object_or_404(Organizations, id = manager.org.id)
+        state = 'learner'
+
+    block_excercise = get_object_or_404(Block, number_block='600')
+    percent = 0
+    places = []
+
+    order = u'rank'
+    if request.GET.get('order', None) :
+        order = request.GET['order']
+    # Список учеников организации
+    learners = organization.get_learner_org().order_by(order)
+    results = Result.objects.filter(
+        block=block_excercise,
+        learner__in=learners
+    ).order_by("-correct", "time_result")[:3]
+
+    for result in results:
+        if result.total  and result.correct and result.correct > 0:
+            percent = 100.00*(result.correct/result.total)
+        time_result = get_time_str(result.time_result)
+        places.append(
+            {'learner': result.learner, 'percent': percent, 'time': time_result}
+        )
+    # Меняем местами 1 и 2 место - для вывода 1го места по центру
+    places[0], places[1] = places[1], places[0]
+
+    # Список редультатов всех учеников
+    all_results = []
+    # список заголовков таблицы
+    headers = [u'Ranking', u'Date',  u'First Name',  u'Last Name', u'Collected Keys', u'Excel Excercise']
+
+    for learner in learners:
+        # список результатов каждого ученика
+        learner_results = []
+        learner_results.append(learner)
+
+        # Excel Excercise
+        excercise_percent = learner.get_result_excercise()
+        excercise_time = get_time_str(learner.get_time_excercise())
+
+        key_count = learner.get_key_count()
+
+        learner_results.append( 
+            {
+                "rank": learner.rank,
+                "key_count": key_count,
+                "excercise_percent": excercise_percent,
+                "excercise_time": excercise_time,
+            }
+        )
+        all_results.append(learner_results)
+
+     
+    return render(request, 'champions.html', {
+        'places': places,
+        'all_results': all_results,
+        'headers': headers,
+        'organization': organization,
+        'order': order,
+        'state': state,
+    })
+
+
+# @permission_required('HotKeyStat.view_statistic')
 def progress_report(request):
     u"""
     Отчетная форма для Progress(main)
@@ -693,13 +817,16 @@ def progress_report(request):
         sheet.write(n, 1, learner.surname, style_right)
         sheet.write(n, 2, learner.email, style_right)
         sheet.write(n, 3, learner.date_reg.strftime("%d.%m.%Y"), style_right)
-
+        #Excel Excercise
+        time = learner.get_time_excercise()
+        sheet.write(n, 4, '%.2f' % time, style_right)
+        academy_percent = learner.get_result_excercise()
+        sheet.write(n, 5, '%.2f' % academy_percent + r'%', style_left)
+        # Overall Progress
         academy_percent = learner.get_result_type(academy_type)
         sheet.write(n, 6, '%.2f' % academy_percent + r'%', style_left)
-
         game_percent = learner.get_result_type(game_type)
         sheet.write(n, 7, '%.2f' % game_percent + r'%', style_none)
-
         time = learner.get_learner_avgtime(game_type)
         sheet.write(n, 8, '%.2f' % time, style_right)
 
