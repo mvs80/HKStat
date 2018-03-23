@@ -4,23 +4,33 @@
 {% block breadcrumbs %}
     <li><a href="{% url 'HotKeyStat-index' %}">Home</a> </li>
     <li><a href="{% url 'hkstat-progress' %}{% if date_from %}?date_from={{date_from}}{% endif %}{% if date_by and date_from %}&date_by={{date_by}}{% elif date_by %}?date_by={{date_by}}{% endif %}">
-        Learner Progress(main)</a> </li>
+        Learner Progress (main)</a> </li>
     <li><a href="{% url 'hkstat-progress-block'%}{% if date_from %}?date_from={{date_from}}{% endif %}{% if date_by and date_from %}&date_by={{date_by}}{% elif date_by %}?date_by={{date_by}}{% endif %}">
-        Learner Progress(detail)</a> </li>
+        Learner Progress (detail)</a> </li>
     <li class='active'>{{ blocks.0.parent.name }} </li>
 {% endblock %}
 
 {% block page_header %}
-    <h2 align="center">
-        <span class="glyphicon glyphicon-education" aria-hidden="true"></span> &nbsp;
-        Learner Progress
-        <small> ({{ blocks.0.parent.name }})
-            {% if date_from or date_by %}    
-                <br>
-                <a style="color:#eb6f1f"> {{ date_from_s|default_if_none:"nothing"}} -  {{date_by_s|default_if_none:"nothing"}}  </a>
-            {% endif %}
-        </small>
-    </h2>
+<div class="row" >
+    <div class="col-md-offset-3 col-md-5">
+        <h2 align="center">
+            <span class="glyphicon glyphicon-education" aria-hidden="true"></span> &nbsp;
+            Learner Progress<br>
+            <small> ({{ blocks.0.parent.name }})
+                {% if date_from or date_by %}    
+
+                    <a style="color:#eb6f1f"> {{ date_from_s|default_if_none:"nothing"}} -  {{date_by_s|default_if_none:"nothing"}}  </a>
+                {% endif %}
+            </small>
+        </h2>
+    </div>
+    <div class="col-md-2" style="margin-top:3mm;">
+            <a href="{% url 'hkstat-progress-report' %}{% if form.date_from.value %}?date_from={{form.date_from.value}}{% endif %}{% if form.date_from.value and form.date_by.value %}&date_by={{form.date_by.value}}{% elif form.date_by.value %}?date_by={{form.date_by.value}}{% endif %}" 
+            class="btn btn-warning btn-block ">
+            Export to Excel
+            </a>
+    </div>
+</div>
 {% endblock %}
 
 {% block page_content %}
@@ -118,9 +128,5 @@
     {% endfor %}
 
 </table>
-<br>
-<div class="col-md-offset-5 col-md-1">
-        <input type='submit' class='btn btn-warning' name='print' value='Export to Excel' />
-</div>
 
 {% endblock %}
