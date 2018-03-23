@@ -1,5 +1,6 @@
-h2, h1 {
+h3, h2, h1 {
     color: #167249;
+    margin-top: 5px;
 }
 a {
     color: #167249;
@@ -33,6 +34,7 @@ a:hover{
     border-color: #167249;
     color: #ffffff
 }
+
 .btn-success {
     background-color: #167249;
     color: #ffffff
